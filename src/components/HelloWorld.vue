@@ -1,45 +1,256 @@
 <template>
-  <div class="hello">
+  <div class="container">
     <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <div class="row">
+      <div class="col-12">
+        <canvas id="multiLineChart"></canvas>
+      </div>
+      <div class="col-4">
+        <canvas id="simulacao"></canvas>
+      </div>
+      <div class="col-4">
+        <canvas id="lance"></canvas>
+      </div>
+      <div class="col-4">
+        <canvas id="contato"></canvas>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import Chart from 'chart.js/auto';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  data() {
+    return {
+      simulacaoChart: null, // Armazena o gráfico de simulação
+      lanceChart: null,     // Armazena o gráfico de lance
+      contatoChart: null,   // Armazena o gráfico com múltiplos eixos
+      multiLineChart: null, // Armazena o gráfico de múltiplas linhas
+    };
+  },
+  async mounted() {
+    // Gráfico de Simulação
+    const simulacaoCtx = document.getElementById('simulacao');
+    const simulacaoResponse = await fetch('https://localhost:7290/api/simulacoes/monthly-counts');
+    const simulacaoData = await simulacaoResponse.json();
+
+    const simulacaoLabels = simulacaoData.map(item => item.month);
+    const simulacaoTotals = simulacaoData.map(item => item.total);
+
+    this.simulacaoChart = new Chart(simulacaoCtx, {
+      type: 'line',
+      data: {
+        labels: simulacaoLabels,
+        datasets: [{
+          label: 'Total Mensal - Simulação',
+          data: simulacaoTotals,
+          fill: 'origin',
+          borderColor: 'rgb(75, 192, 192)',
+          backgroundColor: 'rgba(75, 192, 192, 0.5)',
+          tension: 0.4
+        }]
+      },
+    });
+
+    // Gráfico de Lance
+    const lanceCtx = document.getElementById('lance');
+    const lanceResponse = await fetch('https://localhost:7290/api/lances/monthly-counts');
+    const lanceData = await lanceResponse.json();
+
+    const lanceLabels = lanceData.map(item => item.month);
+    const lanceTotals = lanceData.map(item => item.total);
+
+    this.lanceChart = new Chart(lanceCtx, {
+      type: 'line',
+      data: {
+        labels: lanceLabels,
+        datasets: [{
+          label: 'Total Mensal - Lance',
+          data: lanceTotals,
+          fill: 'origin',
+          borderColor: 'rgb(75, 75, 255)',
+          backgroundColor: 'rgba(75, 75, 255, 0.5)',
+          tension: 0.4
+        }]
+      },
+    });
+
+    // Gráfico Multi-Eixos com dados dinâmicos
+    const contatoCtx = document.getElementById('contato').getContext('2d');
+
+    // Buscar dados das APIs
+    const boletoResponse = await fetch('https://localhost:7290/api/contact/monthly-boleto');
+    const boletoData = await boletoResponse.json();
+    const boletoTotals = boletoData.map(item => item.total);
+
+    const workResponse = await fetch('https://localhost:7290/api/contact/monthly-work');
+    const workData = await workResponse.json();
+    const workTotals = workData.map(item => item.total);
+
+    const partnerResponse = await fetch('https://localhost:7290/api/contact/monthly-partner');
+    const partnerData = await partnerResponse.json();
+    const partnerTotals = partnerData.map(item => item.total);
+
+    // Usar os mesmos labels para os 3 datasets
+    const labels = boletoData.map(item => item.month); // Supondo que todas as APIs retornem os mesmos meses
+
+    // Dados do gráfico
+    const contatoData = {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Boleto',
+          data: boletoTotals,
+          borderColor: 'rgb(255, 99, 132)',
+          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+          fill: 'origin', // Preencher até a origem
+          tension: 0.4
+        },
+        {
+          label: 'Trabalhe',
+          data: workTotals,
+          borderColor: 'rgb(54, 162, 235)',
+          backgroundColor: 'rgba(54, 162, 235, 0.5)',
+          fill: '-1', // Preencher até o conjunto de dados anterior
+          tension: 0.4
+        },
+        {
+          label: 'Parceiro',
+          data: partnerTotals,
+          borderColor: 'rgb(75, 192, 192)',
+          backgroundColor: 'rgba(75, 192, 192, 0.5)',
+          fill: 'origin', // Preencher até a origem
+          tension: 0.4
+        }
+      ]
+    };
+
+    // Configuração para o gráfico de contatos
+    const contatoConfig = {
+      type: 'line', // Mudei para 'line' para corresponder ao que você quer
+      data: contatoData,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Gráfico de Contatos',
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+          }
+        }
+      },
+    };
+
+    // Criar o gráfico de contatos
+    this.contatoChart = new Chart(contatoCtx, contatoConfig);
+
+    // Gráfico de Múltiplas Linhas
+    const multiLineCtx = document.getElementById('multiLineChart').getContext('2d');
+
+    // Buscar dados das APIs
+    const offerResponse = await fetch('https://localhost:7290/api/leads/monthly-offer');
+    const offerData = await offerResponse.json();
+    const offerTotals = offerData.map(item => item.total);
+    const offerLabels = offerData.map(item => item.month); // Supondo que todas as APIs retornem os mesmos meses
+
+    const simulationResponse = await fetch('https://localhost:7290/api/leads/monthly-simulation');
+    const simulationData = await simulationResponse.json();
+    const simulationTotals = simulationData.map(item => item.total);
+
+    const contactResponse = await fetch('https://localhost:7290/api/leads/monthly-contact');
+    const contactData = await contactResponse.json();
+    const contactTotals = contactData.map(item => item.total);
+
+    // Configuração do gráfico de múltiplas linhas com preenchimento
+    const multiLineData = {
+      labels: offerLabels,
+      datasets: [
+        {
+          label: 'Ofertas',
+          data: offerTotals,
+          borderColor: 'rgb(255, 99, 132)',
+          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+          fill: 'origin', // Preencher até a origem
+          tension: 0.4,
+        },
+        {
+          label: 'Simulações',
+          data: simulationTotals,
+          borderColor: 'rgb(54, 162, 235)',
+          backgroundColor: 'rgba(54, 162, 235, 0.5)',
+          fill: '-1', // Preencher até o conjunto de dados anterior
+          tension: 0.4,
+        },
+        {
+          label: 'Contatos',
+          data: contactTotals,
+          borderColor: 'rgb(75, 192, 192)',
+          backgroundColor: 'rgba(75, 192, 192, 0.5)',
+          fill: 'origin', // Preencher até a origem
+          tension: 0.4,
+        }
+      ]
+    };
+
+    const multiLineConfig = {
+      type: 'line',
+      data: multiLineData,
+      options: {
+        responsive: true,
+        interaction: {
+          mode: 'index',
+          intersect: false,
+        },
+        stacked: false,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Gráfico de Múltiplas Linhas com Preenchimento',
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        }
+      },
+    };
+
+    // Criar o gráfico com o contexto
+    this.multiLineChart = new Chart(multiLineCtx, multiLineConfig);
+  },
+  beforeUnmount() {
+    // Destruir os gráficos antes de desmontar o componente para evitar vazamentos de memória
+    if (this.simulacaoChart) {
+      this.simulacaoChart.destroy();
+    }
+    if (this.lanceChart) {
+      this.lanceChart.destroy();
+    }
+    if (this.contatoChart) {
+      this.contatoChart.destroy();
+    }
+    if (this.multiLineChart) {
+      this.multiLineChart.destroy();
+    }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h3 {
   margin: 40px 0 0;
@@ -54,5 +265,10 @@ li {
 }
 a {
   color: #42b983;
+}
+canvas {
+  width: 100%;
+  height: 400px; /* Ajuste o tamanho dos gráficos */
+  display: block;
 }
 </style>
