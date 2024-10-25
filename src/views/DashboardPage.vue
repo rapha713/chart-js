@@ -46,8 +46,8 @@ export default {
     document.getElementById('contato').width = 300; // Largura
     document.getElementById('contato').height = 200; // Altura
 
-    document.getElementById('multiLineChart').width = 100; // Largura
-    document.getElementById('multiLineChart').height = 20; // Altura
+    document.getElementById('multiLineChart').width = 300; // Largura
+    document.getElementById('multiLineChart').height = 80; // Altura
     
     // Gráfico de Simulação
     const simulacaoCtx = document.getElementById('simulacao');
