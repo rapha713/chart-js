@@ -5,7 +5,7 @@
         <canvas id="multiLineChart"></canvas>
       </div>
     </div>
-      <div class="row">
+    <div class="row">
       <div class="col-4">
         <canvas id="simulacao"></canvas>
       </div>
@@ -32,22 +32,24 @@ export default {
     return {
       simulacaoChart: null, // Armazena o gráfico de simulação
       lanceChart: null,     // Armazena o gráfico de lance
-      contatoChart: null,   // Armazena o gráfico com múltiplos eixos
+      contatoChart: null,
+      contatoData: null,
       multiLineChart: null, // Armazena o gráfico de múltiplas linhas
     };
   },
   async mounted() {
-    document.getElementById('simulacao').width = 300; // Largura
-    document.getElementById('simulacao').height = 200; // Altura
+    // Configurações dos gráficos
+    document.getElementById('simulacao').width = 300;
+    document.getElementById('simulacao').height = 200;
 
-    document.getElementById('lance').width = 300; // Largura
-    document.getElementById('lance').height = 200; // Altura
+    document.getElementById('lance').width = 300;
+    document.getElementById('lance').height = 200;
 
-    document.getElementById('contato').width = 300; // Largura
-    document.getElementById('contato').height = 200; // Altura
+    document.getElementById('contato').width = 300;
+    document.getElementById('contato').height = 200;
 
-    document.getElementById('multiLineChart').width = 300; // Largura
-    document.getElementById('multiLineChart').height = 80; // Altura
+    document.getElementById('multiLineChart').width = 300;
+    document.getElementById('multiLineChart').height = 80;
     
     // Gráfico de Simulação
     const simulacaoCtx = document.getElementById('simulacao');
@@ -95,7 +97,7 @@ export default {
       },
     });
 
-    // Gráfico Multi-Eixos com dados dinâmicos
+    // Gráfico de Contatos como um gráfico de barras
     const contatoCtx = document.getElementById('contato').getContext('2d');
 
     // Buscar dados das APIs
@@ -111,44 +113,42 @@ export default {
     const partnerData = await partnerResponse.json();
     const partnerTotals = partnerData.map(item => item.total);
 
-    // Usar os mesmos labels para os 3 datasets
-    const labels = boletoData.map(item => item.month); // Supondo que todas as APIs retornem os mesmos meses
+    const labels = boletoData.map(item => item.month);
 
-    // Dados do gráfico
-    const contatoData = {
+    this.contatoData = {
       labels: labels,
       datasets: [
         {
           label: 'Boleto',
           data: boletoTotals,
-          borderColor: 'rgb(255, 250, 250)',
-          backgroundColor: 'rgba(255, 250, 250, 0.2)',
-          fill: 'origin', // Preencher até a origem
-          tension: 0.4
+          backgroundColor: 'rgb(255, 250, 250)',
+          borderColor: 'rgba(255, 250, 250, 1)',
+          borderWidth: 1,
         },
         {
           label: 'Trabalhe',
           data: workTotals,
-          borderColor: 'rgb(227, 13, 64)',
-          backgroundColor: 'rgba(227, 13, 64, 0.4)',
-          fill: 'origin', // Preencher até o conjunto de dados anterior
-          tension: 0.4
+          backgroundColor: 'rgb(227, 13, 64)',
+          borderColor: 'rgba(227, 13, 64, 1)',
+          borderWidth: 1,
         },
         {
           label: 'Parceiro',
           data: partnerTotals,
-          borderColor: 'rgb(28, 242, 191)',
-          backgroundColor: 'rgba(28, 242, 191, 0.6)',
-          fill: 'origin', // Preencher até a origem
-          tension: 0.4
+          backgroundColor: 'rgb(28, 242, 191)',
+          borderColor: 'rgba(28, 242, 191, 1)',
+          borderWidth: 1,
         }
       ]
     };
 
-    // Configuração para o gráfico de contatos
-    const contatoConfig = {
-      type: 'line', // Mudei para 'line' para corresponder ao que você quer
-      data: contatoData,
+    // Criar o gráfico de contatos com dados de barras
+    this.contatoChart = new Chart(contatoCtx, {
+      type: 'bar', // Altera para gráfico de barras
+      data: {
+        labels: this.contatoData.labels,
+        datasets: this.contatoData.datasets, // Exibe todos os conjuntos de dados
+      },
       options: {
         responsive: true,
         plugins: {
@@ -166,10 +166,7 @@ export default {
           }
         }
       },
-    };
-
-    // Criar o gráfico de contatos
-    this.contatoChart = new Chart(contatoCtx, contatoConfig);
+    });
 
     // Gráfico de Múltiplas Linhas
     const multiLineCtx = document.getElementById('multiLineChart').getContext('2d');
@@ -178,7 +175,7 @@ export default {
     const offerResponse = await fetch('https://localhost:7290/api/leads/monthly-offer');
     const offerData = await offerResponse.json();
     const offerTotals = offerData.map(item => item.total);
-    const offerLabels = offerData.map(item => item.month); // Supondo que todas as APIs retornem os mesmos meses
+    const offerLabels = offerData.map(item => item.month);
 
     const simulationResponse = await fetch('https://localhost:7290/api/leads/monthly-simulation');
     const simulationData = await simulationResponse.json();
@@ -197,7 +194,7 @@ export default {
           data: offerTotals,
           borderColor: 'rgb(255, 99, 132)',
           backgroundColor: 'rgba(255, 99, 132, 0.5)',
-          fill: 'origin', // Preencher até a origem
+          fill: 'origin',
           tension: 0.4,
         },
         {
@@ -205,7 +202,7 @@ export default {
           data: simulationTotals,
           borderColor: 'rgb(54, 162, 235)',
           backgroundColor: 'rgba(54, 162, 235, 0.5)',
-          fill: '-1', // Preencher até o conjunto de dados anterior
+          fill: '-1',
           tension: 0.4,
         },
         {
@@ -213,7 +210,7 @@ export default {
           data: contactTotals,
           borderColor: 'rgb(75, 192, 192)',
           backgroundColor: 'rgba(75, 192, 192, 0.5)',
-          fill: 'origin', // Preencher até a origem
+          fill: 'origin',
           tension: 0.4,
         }
       ]
