@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <h1>{{ msg }}</h1>
     <div class="row">
       <div class="col-12">
         <canvas id="multiLineChart"></canvas>
@@ -38,6 +37,18 @@ export default {
     };
   },
   async mounted() {
+    document.getElementById('simulacao').width = 300; // Largura
+    document.getElementById('simulacao').height = 200; // Altura
+
+    document.getElementById('lance').width = 300; // Largura
+    document.getElementById('lance').height = 200; // Altura
+
+    document.getElementById('contato').width = 300; // Largura
+    document.getElementById('contato').height = 200; // Altura
+
+    document.getElementById('multiLineChart').width = 100; // Largura
+    document.getElementById('multiLineChart').height = 20; // Altura
+    
     // Gráfico de Simulação
     const simulacaoCtx = document.getElementById('simulacao');
     const simulacaoResponse = await fetch('https://localhost:7290/api/simulacoes/monthly-counts');
@@ -255,10 +266,10 @@ export default {
 
 <style scoped>
 .container {
-  background-color: #1E1E2F; /* Altere para a cor desejada */
-  border-color: #222a42;
-  min-height: 100vh; /* Garante que a altura mínima cubra toda a página */
-  padding: 20px; /* Adiciona algum espaço ao redor do conteúdo */
+  min-height: 100%; /* Garante que a altura mínima cubra toda a página */
+  width: 150%;
+  padding: 0px; /* Adiciona algum espaço ao redor do conteúdo */
+  margin-top: 100px;
 }
 h3 {
   color: #42b983;
@@ -274,6 +285,9 @@ li {
 }
 a {
   color: #42b983;
+}
+.row {
+  padding-bottom: 1.5rem; /* Ajuste o valor conforme necessário */
 }
 canvas {
   width: 100%;
