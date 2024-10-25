@@ -1,26 +1,29 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <DashboardPage msg="Consórcio Ápice"/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import DashboardPage from './views/DashboardPage.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    DashboardPage
   }
 }
 </script>
 
 <style>
+html{
+  background-color: #1E1E2F;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #3e9ed8;
   margin-top: 60px;
+  background-color: #1E1E2F;
 }
 </style>

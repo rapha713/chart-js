@@ -5,6 +5,8 @@
       <div class="col-12">
         <canvas id="multiLineChart"></canvas>
       </div>
+    </div>
+      <div class="row">
       <div class="col-4">
         <canvas id="simulacao"></canvas>
       </div>
@@ -49,7 +51,7 @@ export default {
       data: {
         labels: simulacaoLabels,
         datasets: [{
-          label: 'Total Mensal - Simulação',
+          label: 'Simulação',
           data: simulacaoTotals,
           fill: 'origin',
           borderColor: 'rgb(75, 192, 192)',
@@ -72,11 +74,11 @@ export default {
       data: {
         labels: lanceLabels,
         datasets: [{
-          label: 'Total Mensal - Lance',
+          label: 'Lances',
           data: lanceTotals,
           fill: 'origin',
-          borderColor: 'rgb(75, 75, 255)',
-          backgroundColor: 'rgba(75, 75, 255, 0.5)',
+          borderColor: 'rgb(77, 127, 235)',
+          backgroundColor: 'rgba(77, 127, 235, 0.5)',
           tension: 0.4
         }]
       },
@@ -108,24 +110,24 @@ export default {
         {
           label: 'Boleto',
           data: boletoTotals,
-          borderColor: 'rgb(255, 99, 132)',
-          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+          borderColor: 'rgb(255, 250, 250)',
+          backgroundColor: 'rgba(255, 250, 250, 0.2)',
           fill: 'origin', // Preencher até a origem
           tension: 0.4
         },
         {
           label: 'Trabalhe',
           data: workTotals,
-          borderColor: 'rgb(54, 162, 235)',
-          backgroundColor: 'rgba(54, 162, 235, 0.5)',
-          fill: '-1', // Preencher até o conjunto de dados anterior
+          borderColor: 'rgb(227, 13, 64)',
+          backgroundColor: 'rgba(227, 13, 64, 0.4)',
+          fill: 'origin', // Preencher até o conjunto de dados anterior
           tension: 0.4
         },
         {
           label: 'Parceiro',
           data: partnerTotals,
-          borderColor: 'rgb(75, 192, 192)',
-          backgroundColor: 'rgba(75, 192, 192, 0.5)',
+          borderColor: 'rgb(28, 242, 191)',
+          backgroundColor: 'rgba(28, 242, 191, 0.6)',
           fill: 'origin', // Preencher até a origem
           tension: 0.4
         }
@@ -144,7 +146,7 @@ export default {
           },
           title: {
             display: true,
-            text: 'Gráfico de Contatos',
+            text: 'Contatos',
           }
         },
         scales: {
@@ -219,7 +221,7 @@ export default {
         plugins: {
           title: {
             display: true,
-            text: 'Gráfico de Múltiplas Linhas com Preenchimento',
+            text: 'Leads',
           }
         },
         scales: {
@@ -252,7 +254,14 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  background-color: #1E1E2F; /* Altere para a cor desejada */
+  border-color: #222a42;
+  min-height: 100vh; /* Garante que a altura mínima cubra toda a página */
+  padding: 20px; /* Adiciona algum espaço ao redor do conteúdo */
+}
 h3 {
+  color: #42b983;
   margin: 40px 0 0;
 }
 ul {
@@ -268,7 +277,8 @@ a {
 }
 canvas {
   width: 100%;
-  height: 400px; /* Ajuste o tamanho dos gráficos */
-  display: block;
+  height: 100%; /* Ajuste o tamanho dos gráficos */
+  display: grid;
+  background-color: #27293D;
 }
 </style>
