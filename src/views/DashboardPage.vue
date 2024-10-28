@@ -320,12 +320,13 @@ this.multiLineChart = new Chart(multiLineCtx, multiLineConfig);
 .container {
   padding: 10px; /* Adiciona algum espaço ao redor do conteúdo */
   margin-top: 15px;
+  width: 100rem;
   background-color: #27293D;
 }
 h3 {
   color: #42b983;
-  margin-top: 30px;
-  margin-bottom: 30px;
+  margin-top: 15px;
+  margin-bottom: 20px;
   font-weight: bold;
 }
 ul {
@@ -340,12 +341,12 @@ a {
   color: #42b983;
 }
 .row {
-  padding-bottom: 1.5rem; /* Ajuste o valor conforme necessário */
+  padding-bottom: 5.1rem; /* Ajuste o valor conforme necessário */
 }
 canvas {
   width: 100%;
   height: 100%; /* Ajuste o tamanho dos gráficos */
-  display: grid;
+  display: block;
   background-color: #31344c;
 }
 </style>

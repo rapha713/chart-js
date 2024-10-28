@@ -3,6 +3,7 @@ import DashboardPage from '../views/DashboardPage.vue';
 import ContatosPage from '../views/ContatosPage.vue';
 import LancesPage from '../views/LancesPage.vue';
 import SimulacoesPage from '@/views/SimulacoesPage.vue';
+import UsuariosPage from '@/views/UsuariosPage.vue';
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: '/simulacoes',
     name: 'Simulacoes',
     component: SimulacoesPage,
+  },
+  {
+    path: '/usuarios',
+    name: 'Usuarios',
+    component: UsuariosPage,
   },
 ];
 

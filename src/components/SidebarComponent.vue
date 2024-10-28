@@ -17,7 +17,7 @@
         </a>
       </div>
     </div>
-    <a href="#clients"><i class="fa fa-fw fa-user"></i> Usuários</a>
+    <a href="/usuarios"><i class="fa fa-fw fa-user"></i> Usuários</a>
     <a href="#contact"><i class="fa fa-fw fa-envelope"></i> Contact</a>
   </div>
 </template>
