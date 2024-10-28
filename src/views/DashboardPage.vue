@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <div class="title">
+      <h3>Dashboard</h3>
+    </div>
     <div class="row">
       <div class="col-12">
         <canvas id="multiLineChart"></canvas>
@@ -64,7 +67,7 @@ export default {
       data: {
         labels: simulacaoLabels,
         datasets: [{
-          label: 'Simulação',
+          label: 'Simulações',
           data: simulacaoTotals,
           fill: 'origin',
           borderColor: 'rgb(75, 192, 192)',
@@ -72,7 +75,27 @@ export default {
           tension: 0.4
         }]
       },
-    });
+  options: {
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: 'Simulações',
+        color: 'white',
+      },
+      legend: {
+        labels: {
+          color: 'white', // Altere para a cor desejada
+        }
+      }
+    }
+  }
+});
 
     // Gráfico de Lance
     const lanceCtx = document.getElementById('lance');
@@ -94,8 +117,28 @@ export default {
           backgroundColor: 'rgba(77, 127, 235, 0.5)',
           tension: 0.4
         }]
+    },
+  options: {
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true,
       },
-    });
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: 'Lances',
+        color: 'white',
+      },
+      legend: {
+        labels: {
+          color: 'white', // Altere para a cor desejada
+        }
+      }
+    }
+  }
+});
 
     // Gráfico de Contatos como um gráfico de barras
     const contatoCtx = document.getElementById('contato').getContext('2d');
@@ -116,132 +159,144 @@ export default {
     const labels = boletoData.map(item => item.month);
 
     this.contatoData = {
-      labels: labels,
-      datasets: [
-        {
-          label: 'Boleto',
-          data: boletoTotals,
-          backgroundColor: 'rgb(255, 250, 250)',
-          borderColor: 'rgba(255, 250, 250, 1)',
-          borderWidth: 1,
-        },
-        {
-          label: 'Trabalhe',
-          data: workTotals,
-          backgroundColor: 'rgb(227, 13, 64)',
-          borderColor: 'rgba(227, 13, 64, 1)',
-          borderWidth: 1,
-        },
-        {
-          label: 'Parceiro',
-          data: partnerTotals,
-          backgroundColor: 'rgb(28, 242, 191)',
-          borderColor: 'rgba(28, 242, 191, 1)',
-          borderWidth: 1,
-        }
-      ]
-    };
+  labels: labels,
+  datasets: [
+    {
+      label: 'Boleto',
+      data: boletoTotals,
+      backgroundColor: 'rgb(190, 190, 190)',
+      borderColor: 'rgba(190, 190, 190, 1)',
+      borderWidth: 1,
+    },
+    {
+      label: 'Trabalhe',
+      data: workTotals,
+      backgroundColor: 'rgb(227, 13, 64)',
+      borderColor: 'rgba(227, 13, 64, 1)',
+      borderWidth: 1,
+    },
+    {
+      label: 'Parceiro',
+      data: partnerTotals,
+      backgroundColor: 'rgb(28, 242, 191)',
+      borderColor: 'rgba(28, 242, 191, 1)',
+      borderWidth: 1,
+    }
+  ]
+};
 
-    // Criar o gráfico de contatos com dados de barras
-    this.contatoChart = new Chart(contatoCtx, {
-      type: 'bar', // Altera para gráfico de barras
-      data: {
-        labels: this.contatoData.labels,
-        datasets: this.contatoData.datasets, // Exibe todos os conjuntos de dados
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'top',
-          },
-          title: {
-            display: true,
-            text: 'Contatos',
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-          }
+// Criar o gráfico de contatos com dados de barras
+this.contatoChart = new Chart(contatoCtx, {
+  type: 'bar', // Altera para gráfico de barras
+  data: {
+    labels: this.contatoData.labels,
+    datasets: this.contatoData.datasets, // Exibe todos os conjuntos de dados
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          color: 'rgba(255, 255, 255, 1)' // Cor dos labels da legenda (ex: preto)
         }
       },
-    });
+      title: {
+        display: true,
+        text: 'Contatos',
+        color: 'rgba(255, 255, 255, 1)' // Cor do título (ex: preto)
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+      }
+    }
+  },
+});
+
 
     // Gráfico de Múltiplas Linhas
-    const multiLineCtx = document.getElementById('multiLineChart').getContext('2d');
+const multiLineCtx = document.getElementById('multiLineChart').getContext('2d');
 
-    // Buscar dados das APIs
-    const offerResponse = await fetch('https://localhost:7290/api/leads/monthly-offer');
-    const offerData = await offerResponse.json();
-    const offerTotals = offerData.map(item => item.total);
-    const offerLabels = offerData.map(item => item.month);
+// Buscar dados das APIs
+const offerResponse = await fetch('https://localhost:7290/api/leads/monthly-offer');
+const offerData = await offerResponse.json();
+const offerTotals = offerData.map(item => item.total);
+const offerLabels = offerData.map(item => item.month);
 
-    const simulationResponse = await fetch('https://localhost:7290/api/leads/monthly-simulation');
-    const simulationData = await simulationResponse.json();
-    const simulationTotals = simulationData.map(item => item.total);
+const simulationResponse = await fetch('https://localhost:7290/api/leads/monthly-simulation');
+const simulationData = await simulationResponse.json();
+const simulationTotals = simulationData.map(item => item.total);
 
-    const contactResponse = await fetch('https://localhost:7290/api/leads/monthly-contact');
-    const contactData = await contactResponse.json();
-    const contactTotals = contactData.map(item => item.total);
+const contactResponse = await fetch('https://localhost:7290/api/leads/monthly-contact');
+const contactData = await contactResponse.json();
+const contactTotals = contactData.map(item => item.total);
 
-    // Configuração do gráfico de múltiplas linhas com preenchimento
-    const multiLineData = {
-      labels: offerLabels,
-      datasets: [
-        {
-          label: 'Ofertas',
-          data: offerTotals,
-          borderColor: 'rgb(255, 99, 132)',
-          backgroundColor: 'rgba(255, 99, 132, 0.5)',
-          fill: 'origin',
-          tension: 0.4,
-        },
-        {
-          label: 'Simulações',
-          data: simulationTotals,
-          borderColor: 'rgb(54, 162, 235)',
-          backgroundColor: 'rgba(54, 162, 235, 0.5)',
-          fill: '-1',
-          tension: 0.4,
-        },
-        {
-          label: 'Contatos',
-          data: contactTotals,
-          borderColor: 'rgb(75, 192, 192)',
-          backgroundColor: 'rgba(75, 192, 192, 0.5)',
-          fill: 'origin',
-          tension: 0.4,
-        }
-      ]
-    };
+// Configuração do gráfico de múltiplas linhas com preenchimento
+const multiLineData = {
+  labels: offerLabels,
+  datasets: [
+    {
+      label: 'Ofertas',
+      data: offerTotals,
+      borderColor: 'rgb(255, 99, 132)',
+      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      fill: 'origin',
+      tension: 0.4,
+    },
+    {
+      label: 'Simulações',
+      data: simulationTotals,
+      borderColor: 'rgb(54, 162, 235)',
+      backgroundColor: 'rgba(54, 162, 235, 0.5)',
+      fill: '-1',
+      tension: 0.4,
+    },
+    {
+      label: 'Contatos',
+      data: contactTotals,
+      borderColor: 'rgb(75, 192, 192)',
+      backgroundColor: 'rgba(75, 192, 192, 0.5)',
+      fill: 'origin',
+      tension: 0.4,
+    }
+  ]
+};
 
-    const multiLineConfig = {
-      type: 'line',
-      data: multiLineData,
-      options: {
-        responsive: true,
-        interaction: {
-          mode: 'index',
-          intersect: false,
-        },
-        stacked: false,
-        plugins: {
-          title: {
-            display: true,
-            text: 'Leads',
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        }
+const multiLineConfig = {
+  type: 'line',
+  data: multiLineData,
+  options: {
+    responsive: true,
+    interaction: {
+      mode: 'index',
+      intersect: false,
+    },
+    stacked: false,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Leads',
+        color: 'white',
       },
-    };
+      legend: {
+        labels: {
+          color: 'white', // Altere para a cor desejada
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    }
+  },
+};
 
-    // Criar o gráfico com o contexto
-    this.multiLineChart = new Chart(multiLineCtx, multiLineConfig);
+// Criar o gráfico com o contexto
+this.multiLineChart = new Chart(multiLineCtx, multiLineConfig);
+
   },
   beforeUnmount() {
     // Destruir os gráficos antes de desmontar o componente para evitar vazamentos de memória
@@ -263,14 +318,15 @@ export default {
 
 <style scoped>
 .container {
-  min-height: 100%; /* Garante que a altura mínima cubra toda a página */
-  width: 150%;
-  padding: 0px; /* Adiciona algum espaço ao redor do conteúdo */
-  margin-top: 100px;
+  padding: 10px; /* Adiciona algum espaço ao redor do conteúdo */
+  margin-top: 15px;
+  background-color: #27293D;
 }
 h3 {
   color: #42b983;
-  margin: 40px 0 0;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  font-weight: bold;
 }
 ul {
   list-style-type: none;
@@ -290,6 +346,6 @@ canvas {
   width: 100%;
   height: 100%; /* Ajuste o tamanho dos gráficos */
   display: grid;
-  background-color: #27293D;
+  background-color: #31344c;
 }
 </style>

@@ -1,5 +1,6 @@
 <template>
     <div class="card">
+      <h3>Lances</h3>
       <table>
         <thead>
           <tr>
@@ -137,11 +138,22 @@
   </script>
   
   <style scoped>
-  .card {
-    padding: 20px;
-    border-radius: 5px;
-    background-color: #27293D;
-  }
+.card {
+  padding: 7px;
+  border-radius: 5px;
+  background-color: #27293D;
+  width: 89%;
+  margin-left: auto;
+  margin-right: 0.3%;
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+h3 {
+  color: #42b983;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
   
   table {
     width: 100%;

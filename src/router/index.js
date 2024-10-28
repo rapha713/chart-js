@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import DashboardPage from '../views/DashboardPage.vue';
 import ContatosPage from '../views/ContatosPage.vue';
+import LancesPage from '../views/LancesPage.vue';
 import SimulacoesPage from '@/views/SimulacoesPage.vue';
 
 const routes = [
   {
-    path: '/dashboard',
+    path: '/',
     name: 'Dashboard',
     component: DashboardPage,
   },
@@ -13,6 +14,11 @@ const routes = [
     path: '/contatos',
     name: 'Contatos',
     component: ContatosPage,
+  },
+  {
+    path: '/lances',
+    name: 'Lances',
+    component: LancesPage,
   },
   {
     path: '/simulacoes',

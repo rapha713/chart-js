@@ -1,5 +1,6 @@
 <template>
   <div class="card">
+    <h3>Contatos</h3>
     <table>
       <thead>
         <tr>
@@ -127,9 +128,20 @@ export default {
 
 <style scoped>
 .card {
-  padding: 20px;
+  padding: 7px;
   border-radius: 5px;
   background-color: #27293D;
+  width: 89%;
+  margin-left: auto;
+  margin-right: 0.3%;
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+h3 {
+  color: #42b983;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
 }
 
 table {

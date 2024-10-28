@@ -1,18 +1,18 @@
 <template>
   <div class="sidebar">
-    <a href="../views/DashboardPage.vue" style="margin-top: 150%;"><i class="fa fa-fw fa-home"></i> Dashboard</a>
+    <a href="/" style="margin-top: 150%;"><i class="fa fa-fw fa-home"></i> Dashboard</a>
     <div @click="toggleDropdown" class="dropdown">
       <a href="javascript:void(0)" aria-haspopup="true" :aria-expanded="dropdownVisible">
         <i class="fa fa-fw fa-th"></i> Dados
       </a>
       <div v-if="dropdownVisible" class="dropdown-content" :class="{ 'show': dropdownVisible }">
-        <a href="../views/ContatosPage.vue" style="font-size: medium;">
+        <a href="/contatos" style="font-size: medium;">
           <i class="fa fa-fw fa-angle-double-right"></i> Contatos
         </a>
-        <a href="../views/LancesPage.vue" style="font-size: medium;">
+        <a href="/lances" style="font-size: medium;">
           <i class="fa fa-fw fa-angle-double-right"></i> Lances
         </a>
-        <a href="../views/SimulacoesPage.vue" style="font-size: medium;">
+        <a href="/simulacoes" style="font-size: medium;">
           <i class="fa fa-fw fa-angle-double-right"></i> Simulações
         </a>
       </div>
@@ -56,7 +56,7 @@ methods: {
   background: linear-gradient(to bottom, #3e9ed8, #154968);
   overflow-x: hidden;
   padding-top: 50px;
-
+  margin-left: -0.3%;
   border-radius: 15px 15px 15px 15px; /* Borda arredondada do lado esquerdo */
   box-shadow: 2px 0 5px rgba(150, 150, 150, 0.3); /* Sombra para dar um efeito de profundidade */
 }

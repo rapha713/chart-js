@@ -2,16 +2,13 @@
   <div id="app">
     <NavbarComponent title="Dashboard" />
     <SidebarComponent />
-    <div class="main">
-      <SimuluacoesPage />
-    </div>
+    <router-view />
   </div>
 </template>
 
 <script>
 import NavbarComponent from './components/NavbarComponent.vue'
 import SidebarComponent from './components/SidebarComponent.vue'
-import SimuluacoesPage from './views/SimulacoesPage.vue'; // Importando a nova página
 import 'font-awesome/css/font-awesome.css'; // Importação aqui
 
 export default {
@@ -19,7 +16,6 @@ export default {
   components: {
     NavbarComponent,
     SidebarComponent,
-    SimuluacoesPage
   }
 }
 </script>

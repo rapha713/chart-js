@@ -1,5 +1,6 @@
 <template>
     <div class="card">
+    <h3>Simulações</h3>
       <table>
         <thead>
           <tr>
@@ -136,11 +137,16 @@
   </script>
   
   <style scoped>
-  .card {
-    padding: 20px;
-    border-radius: 5px;
-    background-color: #27293D;
-  }
+.card {
+  padding: 7px;
+  border-radius: 5px;
+  background-color: #27293D;
+  width: 89%;
+  margin-left: auto;
+  margin-right: 0.3%;
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
   
   table {
     width: 100%;
@@ -253,4 +259,10 @@
   .fa-info:hover {
     color: #4eacf0; /* Cor ao passar o mouse */
   }
+  h3 {
+  color: #42b983;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
   </style>
