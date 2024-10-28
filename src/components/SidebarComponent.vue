@@ -1,16 +1,47 @@
 <template>
   <div class="sidebar">
-    <a href="#dashboard" style="margin-top: 150%;"><i class="fa fa-fw fa-home"></i> Dashboard</a>
-    <a href="#services"><i class="fa fa-fw fa-wrench"></i> Services</a>
-    <a href="#clients"><i class="fa fa-fw fa-user"></i> Clients</a>
+    <a href="../views/DashboardPage.vue" style="margin-top: 150%;"><i class="fa fa-fw fa-home"></i> Dashboard</a>
+    <div @click="toggleDropdown" class="dropdown">
+      <a href="javascript:void(0)" aria-haspopup="true" :aria-expanded="dropdownVisible">
+        <i class="fa fa-fw fa-th"></i> Dados
+      </a>
+      <div v-if="dropdownVisible" class="dropdown-content" :class="{ 'show': dropdownVisible }">
+        <a href="../views/ContatosPage.vue" style="font-size: medium;">
+          <i class="fa fa-fw fa-angle-double-right"></i> Contatos
+        </a>
+        <a href="../views/LancesPage.vue" style="font-size: medium;">
+          <i class="fa fa-fw fa-angle-double-right"></i> Lances
+        </a>
+        <a href="../views/SimulacoesPage.vue" style="font-size: medium;">
+          <i class="fa fa-fw fa-angle-double-right"></i> Simulações
+        </a>
+      </div>
+    </div>
+    <a href="#clients"><i class="fa fa-fw fa-user"></i> Usuários</a>
     <a href="#contact"><i class="fa fa-fw fa-envelope"></i> Contact</a>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'SidebarComponent'
-}
+  name: 'SidebarComponent',
+  data() {
+    return {
+      dropdownVisible: false // Estado para controlar a visibilidade do dropdown
+    };
+  },
+  mounted() {
+  document.addEventListener('click', this.handleClickOutside);
+},
+beforeUnmount() {
+  document.removeEventListener('click', this.handleClickOutside);
+},
+methods: {
+    toggleDropdown() {
+      this.dropdownVisible = !this.dropdownVisible; // Alterna a visibilidade
+    }
+  }
+};
 </script>
 
 <style scoped>
@@ -41,5 +72,13 @@ export default {
 
 .sidebar a:hover {
   color: #dddddd;
+}
+.dropdown-content {
+  display: none;
+}
+
+.dropdown-content.show {
+  display: block; /* Exibe quando a classe 'show' é aplicada */
+  transition: max-height 0.3s ease-in-out; /* Exemplo de transição */
 }
 </style>

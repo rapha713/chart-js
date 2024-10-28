@@ -3,7 +3,7 @@
     <NavbarComponent title="Dashboard" />
     <SidebarComponent />
     <div class="main">
-      <DashboardPage msg="Consórcio Ápice" />
+      <SimuluacoesPage />
     </div>
   </div>
 </template>
@@ -11,7 +11,7 @@
 <script>
 import NavbarComponent from './components/NavbarComponent.vue'
 import SidebarComponent from './components/SidebarComponent.vue'
-import DashboardPage from './views/DashboardPage.vue'
+import SimuluacoesPage from './views/SimulacoesPage.vue'; // Importando a nova página
 import 'font-awesome/css/font-awesome.css'; // Importação aqui
 
 export default {
@@ -19,7 +19,7 @@ export default {
   components: {
     NavbarComponent,
     SidebarComponent,
-    DashboardPage
+    SimuluacoesPage
   }
 }
 </script>
