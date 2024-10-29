@@ -5,7 +5,7 @@
       <!-- Campo para "Title" -->
       <h5 style="font-weight: bold; text-align: left;">Título</h5>
       <div class="input-container">
-        <i class="fa fa-tag icon"></i>
+        <i class="fa fa-copyright icon"></i>
         <input v-model="config.title" class="input-field" type="text" placeholder="Title" />
         <button @click="updateConfigField('title')" class="btn">Atualizar</button>
       </div>
@@ -13,7 +13,7 @@
       <!-- Campo para "Description" -->
       <h5 style="font-weight: bold; text-align: left;">Descrição</h5>
       <div class="input-container">
-        <i class="fa fa-info-circle icon"></i>
+        <i class="fa fa-tag icon"></i>
         <input v-model="config.description" class="input-field" type="text" placeholder="Description" />
         <button @click="updateConfigField('description')" class="btn">Atualizar</button>
       </div>
@@ -29,7 +29,7 @@
       <!-- Campo para "Simulation Emails" -->
       <h5 style="font-weight: bold; text-align: left;">Emails de Simulação</h5>
       <div class="input-container">
-        <i class="fa fa-envelope icon"></i>
+        <i class="fa fa-calculator icon"></i>
         <input v-model="config.simulationEmails" class="input-field" type="text" placeholder="Simulation Emails" />
         <button @click="updateConfigField('simulationEmails')" class="btn">Atualizar</button>
       </div>
@@ -37,7 +37,7 @@
       <!-- Campo para "Bid Emails" -->
       <h5 style="font-weight: bold; text-align: left;">Emails de Lances</h5>
       <div class="input-container">
-        <i class="fa fa-envelope icon"></i>
+        <i class="fa fa-money icon"></i>
         <input v-model="config.bidEmails" class="input-field" type="text" placeholder="Bid Emails" />
         <button @click="updateConfigField('bidEmails')" class="btn">Atualizar</button>
       </div>

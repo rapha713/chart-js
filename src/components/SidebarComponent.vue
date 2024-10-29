@@ -17,6 +17,7 @@
         </a>
       </div>
     </div>
+    <a href="/faqs"><i class="fa fa-fw fa-question"></i> Perguntas</a>
     <a href="/usuarios"><i class="fa fa-fw fa-user"></i> Usuários</a>
     <a href="/configuracoes" style="font-size: larger;"><i class="fa fa-fw fa-cog"></i> Configurações</a>
   </div>
