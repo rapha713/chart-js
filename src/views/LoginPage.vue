@@ -39,31 +39,6 @@
               <p v-if="errorMessage" class="errorMessage">{{ errorMessage }}</p>
             </form>
           </div>
-  
-          <div class="register" v-else>
-            <div class="top">
-              <img
-                class="logo"
-                src="https://res.cloudinary.com/dc3c8nrut/image/upload/v1685298768/logo-placeholder_l3yodl.png"
-              />
-              <div class="title">Criar Conta</div>
-              <div class="subtitle">
-                Já tem uma conta?
-                <span class="subtitle-action" @click="signIn = true">Login</span>
-              </div>
-            </div>
-  
-            <div class="form">
-              <input type="text" placeholder="Nome" v-model="firstName" class="w100" />
-              <input type="text" placeholder="Sobrenome" v-model="lastName" class="w100" />
-              <input type="text" placeholder="Email" v-model="email.value" :class="{ invalid: email.error }" />
-              <input type="password" placeholder="Senha" v-model="password.value" :class="{ invalid: password.error }" />
-            </div>
-  
-            <button class="action" :class="{ 'action-disabled': !registerValid }" @click="createAccount">
-              Criar Conta
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -73,8 +48,6 @@
   export default {
     data() {
       return {
-        firstName: "",
-        lastName: "",
         email: { value: "", error: false },
         password: { value: "", error: false },
         signIn: true,
@@ -82,17 +55,33 @@
       };
     },
     methods: {
-      login() {
-        if (this.email.value === 'user@example.com' && this.password.value === 'password123') {
-          localStorage.setItem('isAuthenticated', 'true');
-          this.$router.push({ name: 'Dashboard' });
-        } else {
-          this.errorMessage = 'Email ou senha incorretos.';
-        }
-      },
-      createAccount() {
-        console.log('Criar conta: ', this.firstName, this.lastName, this.email.value, this.password.value);
-      },
+  async login() {
+    this.errorMessage = ""; // Limpar mensagens de erro antes de uma nova tentativa
+    try {
+      const response = await fetch('https://localhost:7290/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // As chaves devem ser em minúsculas conforme esperado pela API
+        body: JSON.stringify({ email: this.email.value, senha: this.password.value }), 
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // Exibir mensagem de sucesso ou redirecionar
+        this.errorMessage = data.message; // Mostra a mensagem retornada
+        // Aqui você pode querer redirecionar após um login bem-sucedido, se apropriado
+        this.$router.push({ name: 'Dashboard' }); // Redirecionar para o dashboard
+      } else {
+        const errorData = await response.json();
+        this.errorMessage = errorData.message || 'Erro desconhecido. Tente novamente.';
+      }
+    } catch (error) {
+      console.error('Erro ao fazer login:', error);
+      this.errorMessage = 'Erro ao conectar ao servidor.';
+    }
+  },
       validateEmail() {
         this.email.error = !this.email.value;
       },
@@ -103,133 +92,122 @@
     computed: {
       loginValid() {
         return this.email.value && this.password.value;
-      },
-      registerValid() {
-        return this.firstName && this.lastName && this.email.value && this.password.value;
       }
     }
   };
-  </script>
+</script>
   
 <style lang="scss">
   .login-page {
-  height: 100vh; /* Ocupa toda a altura da tela */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(to bottom, rgba(96, 108, 136, 1) 0%, rgba(63, 76, 107, 1) 100%);
+    height: 100vh; /* Ocupa toda a altura da tela */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom, rgba(96, 108, 136, 1) 0%, rgba(63, 76, 107, 1) 100%);
   }
   
-    @mixin box {
-      box-shadow: 1px 1px 2px 1px #ccc;
-    }
+  @mixin box {
+    box-shadow: 1px 1px 2px 1px #ccc;
+  }
   
-    @mixin field {
-      border: 1px solid #aaa;
-      height: 40px;
-      padding: 10px;
-      margin-top: 20px;
-      border-radius: 5px;
-      box-sizing: border-box;
-    }
+  @mixin field {
+    border: 1px solid #aaa;
+    height: 40px;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
   
-    input[type="text"], input[type="email"], input[type="password"] {
-      @include field;
-    }
+  input[type="text"], input[type="email"], input[type="password"] {
+    @include field;
+  }
   
-    .invalid {
-      border: 2px solid red !important;
-      &::placeholder {
-        color: red;
-      }
-    }
-  
-    .errorMessage {
+  .invalid {
+    border: 2px solid red !important;
+    &::placeholder {
       color: red;
-      margin: 10px;
-      top: 5px;
     }
+  }
   
-    .w100 {
-      width: 100%;
+  .errorMessage {
+    color: red;
+    margin: 10px;
+    top: 5px;
+  }
+  
+  .w100 {
+    width: 100%;
+  }
+  
+  .logo {
+    width: 300px;
+    margin-bottom: 10px;
+  }
+  
+  .action {
+    height: 40px;
+    text-transform: uppercase;
+    border-radius: 25px;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    background: green;
+    margin-top: 20px;
+    color: #fff;
+    font-size: 1.2rem;
+    @include box;
+  }
+  
+  .action-disabled {
+    color: #eee;
+    background: #aaa;
+    cursor: auto;
+  }
+  
+  .top {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+  
+  .title {
+    width: 100%;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .loginBox {
+    background: #fff;
+    border-radius: 15px;
+    max-width: 400px;
+    padding: 25px 55px;
+    animation: slideInTop 1s;
+  }
+  
+  @keyframes slideInTop {
+    from {
+      opacity: 0;
+      transform: translateY(-30%);
     }
-  
-    .logo {
-      width: 300px;
-      margin-bottom: 10px;
+    to {
+      opacity: 100;
+      transform: translateY(0%);
     }
+  }
   
-    .action {
-      height: 40px;
-      text-transform: uppercase;
-      border-radius: 25px;
-      width: 100%;
-      border: none;
-      cursor: pointer;
-      background: green;
-      margin-top: 20px;
-      color: #fff;
-      font-size: 1.2rem;
+  @media screen and (min-width: 440px) {
+    .loginBox {
       @include box;
     }
+  }
   
-    .action-disabled {
-      color: #eee;
-      background: #aaa;
-      cursor: auto;
-    }
-  
-    .top {
-      display: flex;
-      align-items: center;
-      flex-direction: column;
-      margin-bottom: 10px;
-    }
-  
-    .title {
-      width: 100%;
-      font-size: 1.8rem;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-  
-    .subtitle {
-      .subtitle-action {
-        color: green;
-        font-weight: bold;
-        cursor: pointer;
-      }
-    }
-  
+  @media screen and (max-width: 440px) {
     .loginBox {
-      background: #fff;
-      border-radius: 15px;
-      max-width: 400px;
-      padding: 25px 55px;
-      animation: slideInTop 1s;
+      padding: 25px 25px;
+      max-width: 100vw;
     }
-  
-    @keyframes slideInTop {
-      from {
-        opacity: 0;
-        transform: translateY(-30%);
-      }
-      to {
-        opacity: 100;
-        transform: translateY(0%);
-      }
-    }
-  
-    @media screen and (min-width: 440px) {
-      .loginBox {
-        @include box;
-      }
-    }
-  
-    @media screen and (max-width: 440px) {
-      .loginBox {
-        padding: 25px 25px;
-        max-width: 100vw;
-      }
-    }
-  </style>  
+  }
+</style>
