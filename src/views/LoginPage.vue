@@ -55,33 +55,31 @@
       };
     },
     methods: {
-  async login() {
-    this.errorMessage = ""; // Limpar mensagens de erro antes de uma nova tentativa
-    try {
-      const response = await fetch('https://localhost:7290/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        // As chaves devem ser em minúsculas conforme esperado pela API
-        body: JSON.stringify({ email: this.email.value, senha: this.password.value }), 
-      });
+        async login() {
+  this.errorMessage = ""; // Limpar mensagens de erro antes de uma nova tentativa
+  try {
+    const response = await fetch('https://localhost:7290/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: this.email.value, senha: this.password.value }),
+    });
 
-      if (response.ok) {
-        const data = await response.json();
-        // Exibir mensagem de sucesso ou redirecionar
-        this.errorMessage = data.message; // Mostra a mensagem retornada
-        // Aqui você pode querer redirecionar após um login bem-sucedido, se apropriado
-        this.$router.push({ name: 'Dashboard' }); // Redirecionar para o dashboard
-      } else {
-        const errorData = await response.json();
-        this.errorMessage = errorData.message || 'Erro desconhecido. Tente novamente.';
-      }
-    } catch (error) {
-      console.error('Erro ao fazer login:', error);
-      this.errorMessage = 'Erro ao conectar ao servidor.';
+    if (response.ok) {
+      const data = await response.json();
+      localStorage.setItem('token', data.token); // Armazene o token se necessário
+      localStorage.setItem('isAuthenticated', 'true'); // Atualiza o estado de autenticação
+      this.$router.push({ name: 'Dashboard' });
+    } else {
+      const errorData = await response.json();
+      this.errorMessage = errorData.message || 'Erro desconhecido. Tente novamente.';
     }
-  },
+  } catch (error) {
+    console.error('Erro ao fazer login:', error);
+    this.errorMessage = 'Erro ao conectar ao servidor.';
+  }
+},
       validateEmail() {
         this.email.error = !this.email.value;
       },
@@ -95,9 +93,9 @@
       }
     }
   };
-</script>
+  </script>
   
-<style lang="scss">
+  <style lang="scss">
   .login-page {
     height: 100vh; /* Ocupa toda a altura da tela */
     display: flex;
@@ -210,4 +208,4 @@
       max-width: 100vw;
     }
   }
-</style>
+  </style>  

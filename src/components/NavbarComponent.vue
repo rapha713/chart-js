@@ -39,9 +39,11 @@ export default {
     };
   },
   methods: {
-  logout() {
-    this.router.push({ name: 'Login' });
-
+    logout() {
+  localStorage.removeItem('token'); // Se você estiver usando token
+  localStorage.removeItem('isAuthenticated'); // Remove o estado de autenticação
+  this.$router.push({ name: 'Login' });
+  
     this.notify({
       title: 'Logout realizado',
       text: 'Você foi redirecionado para a página de login.',

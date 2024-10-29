@@ -10,7 +10,7 @@ import LoginPage from '@/views/LoginPage.vue'; // Importando a página de login
 
 const routes = [
   {
-    path: '/login',
+    path: '/',
     name: 'Login',
     component: LoginPage,
   },
@@ -63,15 +63,14 @@ const router = createRouter({
   routes,
 });
 
-// Verificando a autenticação antes de acessar rotas protegidas
-// Verificando a autenticação antes de acessar rotas protegidas
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true'; // Verifica se o usuário está autenticado
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+  console.log(`Autenticado: ${isAuthenticated}, Rota: ${to.name}`); // Adicione esta linha
 
   if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
-    next({ name: 'Login' }); // Redireciona para a página de login
+    next({ name: 'Login' });
   } else {
-    next(); // Permite o acesso
+    next();
   }
 });
 
