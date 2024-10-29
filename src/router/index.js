@@ -4,6 +4,7 @@ import ContatosPage from '../views/ContatosPage.vue';
 import LancesPage from '../views/LancesPage.vue';
 import SimulacoesPage from '@/views/SimulacoesPage.vue';
 import UsuariosPage from '@/views/UsuariosPage.vue';
+import ConfigPage from '@/views/ConfigPage.vue';
 
 const routes = [
   {
@@ -23,14 +24,19 @@ const routes = [
   },
   {
     path: '/simulacoes',
-    name: 'Simulacoes',
+    name: 'Simulações',
     component: SimulacoesPage,
   },
   {
     path: '/usuarios',
-    name: 'Usuarios',
+    name: 'Usuários',
     component: UsuariosPage,
   },
+   {
+     path: '/configuracoes',
+     name: 'Configurações',
+     component: ConfigPage,
+   }
 ];
 
 const router = createRouter({

@@ -317,4 +317,8 @@
     cursor: pointer;
     color: white;
   }
+
+  .btn-primary:hover {
+    background-color: #46466c;
+  }
 </style>

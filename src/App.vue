@@ -1,23 +1,37 @@
 <template>
   <div id="app">
-    <NavbarComponent title="Dashboard" />
+    <NavbarComponent :title="pageTitle" />
     <SidebarComponent />
     <router-view />
   </div>
 </template>
 
 <script>
+import { watch, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import NavbarComponent from './components/NavbarComponent.vue'
 import SidebarComponent from './components/SidebarComponent.vue'
-import 'font-awesome/css/font-awesome.css'; // Importação aqui
+import 'font-awesome/css/font-awesome.css';
 
 export default {
   name: 'App',
   components: {
     NavbarComponent,
     SidebarComponent,
-  }
-}
+  },
+  setup() {
+    const route = useRoute();
+    const pageTitle = ref(route.name);
+
+    watch(route, (newRoute) => {
+      pageTitle.value = newRoute.name;
+    });
+
+    return {
+      pageTitle,
+    };
+  },
+};
 </script>
 
 <style>
@@ -31,14 +45,14 @@ html {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #3e9ed8;
-  margin-top: 0; /* Removendo a margem para a navbar */
+  margin-top: 0;
   background: linear-gradient(to bottom, #1E1E2F, #14141f);
   display: flex;
-  flex-direction: column; /* Mudando a direção do flex */
+  flex-direction: column;
 }
 
 .main {
-  margin-left: 220px; /* Ajustando a margem para corresponder à nova largura do sidebar */
-  padding: 20px; /* Adicionando padding para o conteúdo principal */
+  margin-left: 220px;
+  padding: 20px;
 }
 </style>

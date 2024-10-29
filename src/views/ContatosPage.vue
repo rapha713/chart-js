@@ -212,6 +212,10 @@ button {
   cursor: pointer;
 }
 
+button:hover {
+  background-color: #46466c;
+}
+
 .details {
   margin-top: 20px;
   color: white;

@@ -18,7 +18,7 @@
       </div>
     </div>
     <a href="/usuarios"><i class="fa fa-fw fa-user"></i> Usuários</a>
-    <a href="#contact"><i class="fa fa-fw fa-envelope"></i> Contact</a>
+    <a href="/configuracoes" style="font-size: larger;"><i class="fa fa-fw fa-cog"></i> Configurações</a>
   </div>
 </template>
 
@@ -27,7 +27,7 @@ export default {
   name: 'SidebarComponent',
   data() {
     return {
-      dropdownVisible: false // Estado para controlar a visibilidade do dropdown
+      dropdownVisible: false
     };
   },
   mounted() {
@@ -38,7 +38,7 @@ beforeUnmount() {
 },
 methods: {
     toggleDropdown() {
-      this.dropdownVisible = !this.dropdownVisible; // Alterna a visibilidade
+      this.dropdownVisible = !this.dropdownVisible;
     }
   }
 };

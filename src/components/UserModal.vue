@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: 'UserModal', // Renomeie o componente aqui
+  name: 'UserModal',
   props: {
     isOpen: {
       type: Boolean,

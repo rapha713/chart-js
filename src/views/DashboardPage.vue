@@ -33,11 +33,11 @@ export default {
   },
   data() {
     return {
-      simulacaoChart: null, // Armazena o gráfico de simulação
-      lanceChart: null,     // Armazena o gráfico de lance
+      simulacaoChart: null,
+      lanceChart: null,
       contatoChart: null,
       contatoData: null,
-      multiLineChart: null, // Armazena o gráfico de múltiplas linhas
+      multiLineChart: null,
     };
   },
   async mounted() {

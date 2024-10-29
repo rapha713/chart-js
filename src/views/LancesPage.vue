@@ -207,6 +207,10 @@ h3 {
     border-radius: 5px;
     cursor: pointer;
   }
+
+  .pagination button:hover {
+  background-color: #46466c;
+}
   
   .pagination button:disabled {
     background-color: #14141f; /* Cor do botão desabilitado */
