@@ -83,10 +83,10 @@
       <div v-if="isOffCanvasOpen" class="overlay" @click="closeOffCanvas"></div>
     </div>
   </template>
-  
-  
-  <script>
+
+<script>
 import UserModal from '../components/UserModal.vue';
+import { notify } from '@kyvg/vue3-notification';
 
 export default {
   name: 'FAQManagement',
@@ -104,8 +104,7 @@ export default {
         codPergunta: 0,
         pergunta: '',
         resposta: '',
-        ativa: 'S', // Valor padrão
-        origem: '', // Se necessário
+        ativa: 'N',
       }
     };
   },
@@ -117,11 +116,16 @@ export default {
         const response = await fetch('https://localhost:7290/api/faqs');
         if (response.ok) {
             this.faqs = (await response.json()).map(faq => ({
-            ...faq,
-            isExpanded: false // Inicializa como não expandido
-        }));
+                ...faq,
+                isExpanded: false // Inicializa como não expandido
+            }));
         } else {
             console.error('Erro ao buscar FAQs:', response.statusText);
+            notify({
+                title: "Erro",
+                text: "Erro ao buscar FAQs.",
+                type: "error"
+            });
         }
     },
     openModal() {
@@ -156,90 +160,134 @@ export default {
       if (response.ok) {
         await this.fetchFAQs();
         this.closeModal();
+        notify({
+            title: "Sucesso",
+            text: "Pergunta adicionada com sucesso!",
+            type: "success"
+        });
       } else {
         console.error('Erro ao adicionar pergunta:', response.statusText);
+        notify({
+            title: "Erro",
+            text: "Erro ao adicionar a pergunta.",
+            type: "error"
+        });
       }
     },
     async updateFAQ() {
-  console.log('Dados da FAQ:', {
-    codPergunta: this.form.codPergunta,
-    pergunta: this.form.pergunta,
-    resposta: this.form.resposta,
-    ativa: this.form.ativa
-  });
-  
-  // Certifique-se de que `this.form` tem todas as propriedades necessárias
-  const response = await fetch('https://localhost:7290/api/faqs/edit', {
-    method: 'PUT', // Alterar para PUT
-    headers: {
-      'Content-Type': 'application/json'
+      console.log('Dados da FAQ:', {
+        codPergunta: this.form.codPergunta,
+        pergunta: this.form.pergunta,
+        resposta: this.form.resposta,
+        ativa: this.form.ativa
+      });
+      
+      const response = await fetch('https://localhost:7290/api/faqs/edit', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          codPergunta: this.form.codPergunta,
+          pergunta: this.form.pergunta,
+          resposta: this.form.resposta,
+          ativa: this.form.ativa,
+        })
+      });
+      
+      if (response.ok) {
+        await this.fetchFAQs();
+        this.closeModal();
+        notify({
+            title: "Sucesso",
+            text: "Pergunta editada com sucesso!",
+            type: "success"
+        });
+      } else {
+        const errorData = await response.json();
+        console.error('Erro ao atualizar pergunta:', errorData);
+        notify({
+            title: "Erro",
+            text: "Erro ao atualizar a pergunta.",
+            type: "error"
+        });
+      }
     },
-    body: JSON.stringify({
-      codPergunta: this.form.codPergunta,
-      pergunta: this.form.pergunta,
-      resposta: this.form.resposta,
-      ativa: this.form.ativa,
-    })
-  });
-  
-  if (response.ok) {
-  await this.fetchFAQs();
-  this.closeModal();
-} else {
-  const errorData = await response.json(); // Captura a resposta de erro
-  console.error('Erro ao atualizar pergunta:', errorData);
-}
-},
     confirmDelete(codPergunta) {
       this.codPerguntaToDelete = codPergunta;
-      this.isOffCanvasOpen = true; // Abre o off-canvas
+      this.isOffCanvasOpen = true;
     },
     closeOffCanvas() {
-      this.isOffCanvasOpen = false; // Fecha o off-canvas
+      this.isOffCanvasOpen = false;
     },
     async deleteFAQ() {
-    if (this.codPerguntaToDelete) {
+      if (this.codPerguntaToDelete) {
         console.log('Cod Pergunta para deletar:', this.codPerguntaToDelete);
         const response = await fetch('https://localhost:7290/api/faqs/delete', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ 
-                codPergunta: this.codPerguntaToDelete, 
-                status: "N"  // Pode usar "N" ou "S" conforme a lógica desejada
-            })
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            codPergunta: this.codPerguntaToDelete,
+            status: "N"
+          })
         });
         if (response.ok) {
-            await this.fetchFAQs(); // Atualiza a lista de FAQs
-            this.closeOffCanvas();
+          await this.fetchFAQs();
+          this.closeOffCanvas();
+          notify({
+              title: "Sucesso",
+              text: "Pergunta deletada com sucesso!",
+              type: "success"
+          });
         } else {
-            const errorData = await response.json();
-            console.error('Erro ao deletar pergunta:', errorData);
+          const errorData = await response.json();
+          console.error('Erro ao deletar pergunta:', errorData);
+          notify({
+              title: "Erro",
+              text: "Erro ao deletar a pergunta.",
+              type: "error"
+          });
         }
+      }
+    },
+    async toggleActive(codPergunta, event) {
+      const novaAtivacao = event.target.checked ? 'S' : 'N';
+      try {
+        const response = await fetch('https://localhost:7290/api/faqs/toggle', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ codPergunta, ativa: novaAtivacao })
+        });
+      
+        if (response.ok) {
+          await this.fetchFAQs();
+          notify({
+              title: "Sucesso",
+              text: `FAQ ${novaAtivacao === 'S' ? 'ativada' : 'desativada'} com sucesso!`,
+              type: "success"
+          });
+        } else {
+          console.error('Erro ao alterar o estado:', response.statusText);
+          notify({
+              title: "Erro",
+              text: `Erro ao ${novaAtivacao === 'S' ? 'ativar' : 'desativar'} a FAQ.`,
+              type: "error"
+          });
+        }
+      } catch (error) {
+        console.error('Erro ao fazer o toggle:', error);
+        notify({
+            title: "Erro",
+            text: `Erro ao ${novaAtivacao === 'S' ? 'ativar' : 'desativar'} a FAQ.`,
+            type: "error"
+        });
+      }
     }
-},
-async toggleActive(codPergunta, event) {
-  const novaAtivacao = event.target.checked ? 'S' : 'N';
-  try {
-    const response = await fetch('https://localhost:7290/api/faqs/toggle', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ codPergunta, ativa: novaAtivacao })
-    });
-  
-    if (response.ok) {
-      await this.fetchFaqs(); // Certifique-se de que `fetchFaqs` existe
-    } else {
-      console.error('Erro ao alterar o estado:', response.statusText);
-    }
-  } catch (error) {
-    console.error('Erro ao fazer o toggle:', error);
   }
-}
-    }
 };
 </script>
   
@@ -249,6 +297,7 @@ async toggleActive(codPergunta, event) {
   border-radius: 3px;
   background-color: #27293D;
   margin-bottom: 5px;
+  margin-left: 10.7%;
 }
   .title {
     display: flex;

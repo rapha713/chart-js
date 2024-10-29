@@ -36,7 +36,7 @@
           <form @submit.prevent="isEdit ? updateUser() : addUser()">
             <div class="form-group">
               <label for="name">Nome</label>
-              <input type="text" v-model="form.name" id="name" class="form-control" required style="margin-bottom: 15px;">
+              <input type="text" v-model="form.full_Name" id="full_Name" class="form-control" required style="margin-bottom: 15px;">
             </div>
             <div class="form-group">
               <label for="username">Usuário</label>
@@ -86,68 +86,72 @@
   </template>
   
   <script>
-  import UserModal from '../components/UserModal.vue';
-  
-  export default {
-    name: 'UserManagement',
-    components: {
-      UserModal,
-    },
-    data() {
-      return {
-        users: [],
-        showModal: false,
-        isEdit: false,
-        showPassword: false,
-        isOffCanvasOpen: false,
+import UserModal from '../components/UserModal.vue';
+import { notify } from '@kyvg/vue3-notification';
+
+export default {
+  name: 'UserManagement',
+  components: {
+    UserModal,
+  },
+  data() {
+    return {
+      users: [],
+      showModal: false,
+      isEdit: false,
+      showPassword: false,
+      isOffCanvasOpen: false,
+      adminPassword: '',
+      userIdToDelete: null,
+      form: {
+        id: 0,
+        full_Name: '',
+        email: '',
+        username: '',
+        password: '',
         adminPassword: '',
-        userIdToDelete: null,
-        form: {
-          id: 0,
-          name: '',
-          full_Name: '',
-          email: '',
-          username: '',
-          password: '',
-          adminPassword: '',
-        }
-      };
-    },
-    async mounted() {
-      await this.fetchUsers();
-    },
-    methods: {
-      async fetchUsers() {
+      }
+    };
+  },
+  async mounted() {
+    await this.fetchUsers();
+  },
+  methods: {
+    async fetchUsers() {
+      try {
         const response = await fetch('https://localhost:7290/api/users');
         if (response.ok) {
           this.users = await response.json();
         } else {
-          console.error('Erro ao buscar usuários:', response.statusText);
+          throw new Error(response.statusText);
         }
-      },
-      openModal() {
-        this.showModal = true;
-        this.isEdit = false;
-        this.showPassword = false;
-        this.form = {
-          id: 0,
-          name: '',
-          full_Name: '',
-          email: '',
-          username: '',
-          password: '',
-          adminPassword: '',
-        };
-      },
-      closeModal() {
-        this.showModal = false;
-      },
-      editUser(user) {
-        this.isEdit = true;
-        this.form = { ...user };
-        this.showModal = true;
-      },
-      async addUser() {
+      } catch (error) {
+        notify({ type: 'error', title: 'Erro', text: `Erro ao buscar usuários: ${error.message}` });
+      }
+    },
+    openModal() {
+      this.showModal = true;
+      this.isEdit = false;
+      this.showPassword = false;
+      this.form = {
+        id: 0,
+        full_Name: '',
+        email: '',
+        username: '',
+        password: '',
+        adminPassword: '',
+      };
+    },
+    closeModal() {
+      this.showModal = false;
+    },
+    editUser(user) {
+      this.isEdit = true;
+      this.form = { ...user };
+      this.showModal = true;
+    },
+    async addUser() {
+      try {
         const response = await fetch('https://localhost:7290/api/users/add', {
           method: 'POST',
           headers: {
@@ -158,11 +162,16 @@
         if (response.ok) {
           await this.fetchUsers();
           this.closeModal();
+          notify({ type: 'success', title: 'Sucesso', text: 'Usuário adicionado com sucesso!' });
         } else {
-          console.error('Erro ao adicionar usuário:', response.statusText);
+          throw new Error(response.statusText);
         }
-      },
-      async updateUser() {
+      } catch (error) {
+        notify({ type: 'error', title: 'Erro', text: `Erro ao adicionar usuário: ${error.message}` });
+      }
+    },
+    async updateUser() {
+      try {
         const response = await fetch('https://localhost:7290/api/users/update', {
           method: 'PUT',
           headers: {
@@ -173,20 +182,25 @@
         if (response.ok) {
           await this.fetchUsers();
           this.closeModal();
+          notify({ type: 'success', title: 'Sucesso', text: 'Usuário atualizado com sucesso!' });
         } else {
-          console.error('Erro ao atualizar usuário:', response.statusText);
+          throw new Error(response.statusText);
         }
-      },
-      confirmDelete(id) {
-        this.userIdToDelete = id;
-        this.isOffCanvasOpen = true; // Abre o off-canvas
-      },
-      closeOffCanvas() {
-        this.isOffCanvasOpen = false; // Fecha o off-canvas
-        this.adminPassword = ''; // Resetar a senha ao fechar
-      },
-      async deleteUser() {
-        if (this.userIdToDelete) {
+      } catch (error) {
+        notify({ type: 'error', title: 'Erro', text: `Erro ao atualizar usuário: ${error.message}` });
+      }
+    },
+    confirmDelete(id) {
+      this.userIdToDelete = id;
+      this.isOffCanvasOpen = true; // Abre o off-canvas
+    },
+    closeOffCanvas() {
+      this.isOffCanvasOpen = false; // Fecha o off-canvas
+      this.adminPassword = ''; // Resetar a senha ao fechar
+    },
+    async deleteUser() {
+      if (this.userIdToDelete) {
+        try {
           const response = await fetch('https://localhost:7290/api/users/deleteWithPassword', {
             method: 'POST',
             headers: {
@@ -196,15 +210,19 @@
           });
           if (response.ok) {
             await this.fetchUsers();
+            notify({ type: 'success', title: 'Sucesso', text: 'Usuário excluído com sucesso!' });
           } else {
-            console.error('Erro ao deletar usuário:', response.statusText);
+            throw new Error(response.statusText);
           }
+        } catch (error) {
+          notify({ type: 'error', title: 'Erro', text: `Erro ao deletar usuário: ${error.message}` });
         }
-        this.closeOffCanvas(); // Fecha o off-canvas após a exclusão
       }
+      this.closeOffCanvas(); // Fecha o off-canvas após a exclusão
     }
-  };
-  </script>  
+  }
+};
+</script>
   
   <style scoped>
   .container {

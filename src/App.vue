@@ -2,6 +2,7 @@
   <div id="app">
     <NavbarComponent :title="pageTitle" />
     <SidebarComponent />
+    <notifications />
     <router-view />
   </div>
 </template>
@@ -11,6 +12,7 @@ import { watch, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import NavbarComponent from './components/NavbarComponent.vue'
 import SidebarComponent from './components/SidebarComponent.vue'
+import { Notifications } from '@kyvg/vue3-notification';
 import 'font-awesome/css/font-awesome.css';
 
 export default {
@@ -18,6 +20,7 @@ export default {
   components: {
     NavbarComponent,
     SidebarComponent,
+    Notifications
   },
   setup() {
     const route = useRoute();

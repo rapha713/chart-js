@@ -6,7 +6,7 @@
       <h5 style="font-weight: bold; text-align: left;">Título</h5>
       <div class="input-container">
         <i class="fa fa-copyright icon"></i>
-        <input v-model="config.title" class="input-field" type="text" placeholder="Title" />
+        <input v-model="config.title" class="input-field" type="text" placeholder="Título" />
         <button @click="updateConfigField('title')" class="btn">Atualizar</button>
       </div>
   
@@ -14,7 +14,7 @@
       <h5 style="font-weight: bold; text-align: left;">Descrição</h5>
       <div class="input-container">
         <i class="fa fa-tag icon"></i>
-        <input v-model="config.description" class="input-field" type="text" placeholder="Description" />
+        <input v-model="config.description" class="input-field" type="text" placeholder="Descrição" />
         <button @click="updateConfigField('description')" class="btn">Atualizar</button>
       </div>
   
@@ -22,7 +22,7 @@
       <h5 style="font-weight: bold; text-align: left;">Palavras-chave</h5>
       <div class="input-container">
         <i class="fa fa-key icon"></i>
-        <input v-model="config.keywords" class="input-field" type="text" placeholder="Keywords" />
+        <input v-model="config.keywords" class="input-field" type="text" placeholder="Palavras-chave" />
         <button @click="updateConfigField('keywords')" class="btn">Atualizar</button>
       </div>
   
@@ -30,7 +30,7 @@
       <h5 style="font-weight: bold; text-align: left;">Emails de Simulação</h5>
       <div class="input-container">
         <i class="fa fa-calculator icon"></i>
-        <input v-model="config.simulationEmails" class="input-field" type="text" placeholder="Simulation Emails" />
+        <input v-model="config.simulationEmails" class="input-field" type="text" placeholder="Emails de Simulação" />
         <button @click="updateConfigField('simulationEmails')" class="btn">Atualizar</button>
       </div>
   
@@ -38,7 +38,7 @@
       <h5 style="font-weight: bold; text-align: left;">Emails de Lances</h5>
       <div class="input-container">
         <i class="fa fa-money icon"></i>
-        <input v-model="config.bidEmails" class="input-field" type="text" placeholder="Bid Emails" />
+        <input v-model="config.bidEmails" class="input-field" type="text" placeholder="Emails de Lances" />
         <button @click="updateConfigField('bidEmails')" class="btn">Atualizar</button>
       </div>
   
@@ -46,13 +46,15 @@
       <h5 style="font-weight: bold; text-align: left;">Emails de Contato</h5>
       <div class="input-container">
         <i class="fa fa-envelope icon"></i>
-        <input v-model="config.contactEmails" class="input-field" type="text" placeholder="Contact Emails" />
+        <input v-model="config.contactEmails" class="input-field" type="text" placeholder="Emails de Contato" />
         <button @click="updateConfigField('contactEmails')" class="btn">Atualizar</button>
       </div>
     </div>
   </template>
   
-  <script>
+<script>
+  import { notify } from '@kyvg/vue3-notification';
+  
   export default {
     data() {
       return {
@@ -76,16 +78,29 @@
           if (response.ok) {
             this.config = await response.json();
           } else {
-            console.error('Erro ao buscar configurações:', response.statusText);
+            throw new Error(response.statusText);
           }
         } catch (error) {
-          console.error('Erro ao buscar configurações:', error);
+          notify({
+            type: 'error',
+            text: `Erro ao buscar configurações: ${error.message}</p>`,
+            dangerouslyUseHTMLString: true,
+          });
         }
       },
   
       async updateConfigField(field) {
         const updateData = {
           [field]: this.config[field],
+        };
+  
+        const fieldTitles = {
+          title: 'Título',
+          description: 'Descrição',
+          keywords: 'Palavras-chave',
+          simulationEmails: 'Emails de Simulação',
+          bidEmails: 'Emails de Lances',
+          contactEmails: 'Emails de Contato',
         };
   
         try {
@@ -98,17 +113,25 @@
           });
   
           if (response.ok) {
-            alert(`${field} atualizado com sucesso!`);
+            notify({
+              type: 'success',
+              text: `${fieldTitles[field]} atualizado com sucesso!`,
+              dangerouslyUseHTMLString: true,
+            });
           } else {
-            console.error(`Erro ao atualizar ${field}:`, response.statusText);
+            throw new Error(response.statusText);
           }
         } catch (error) {
-          console.error(`Erro ao atualizar ${field}:`, error);
+          notify({
+            type: 'error',
+            text: `Erro ao atualizar ${fieldTitles[field]}: ${error.message}`,
+            dangerouslyUseHTMLString: true,
+          });
         }
       },
     },
   };
-  </script>
+</script>
   
   <style scoped>
   .container {
