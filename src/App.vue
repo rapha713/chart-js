@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <NavbarComponent :title="pageTitle" />
-    <SidebarComponent />
+    <NavbarComponent :title="pageTitle" v-if="!isLoginPage" />
+    <SidebarComponent v-if="!isLoginPage" />
     <notifications />
     <router-view />
   </div>
 </template>
 
 <script>
-import { watch, ref } from 'vue';
+import { watch, ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import NavbarComponent from './components/NavbarComponent.vue'
-import SidebarComponent from './components/SidebarComponent.vue'
+import NavbarComponent from './components/NavbarComponent.vue';
+import SidebarComponent from './components/SidebarComponent.vue';
 import { Notifications } from '@kyvg/vue3-notification';
 import 'font-awesome/css/font-awesome.css';
 
@@ -20,7 +20,7 @@ export default {
   components: {
     NavbarComponent,
     SidebarComponent,
-    Notifications
+    Notifications,
   },
   setup() {
     const route = useRoute();
@@ -30,8 +30,12 @@ export default {
       pageTitle.value = newRoute.name;
     });
 
+    // Computed property to check if the current route is the login page
+    const isLoginPage = computed(() => route.name === 'Login');
+
     return {
       pageTitle,
+      isLoginPage,
     };
   },
 };

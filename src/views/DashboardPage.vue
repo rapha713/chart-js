@@ -25,6 +25,7 @@
 <script>
 import Chart from 'chart.js/auto';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNotification } from '@kyvg/vue3-notification';
 
 export default {
   name: 'HelloWorld',
@@ -39,6 +40,10 @@ export default {
       contatoData: null,
       multiLineChart: null,
     };
+  },
+  setup() {
+    const { notify } = useNotification(); // Usando o hook de notificações
+    return { notify };
   },
   async mounted() {
     // Configurações dos gráficos
@@ -297,6 +302,12 @@ const multiLineConfig = {
 // Criar o gráfico com o contexto
 this.multiLineChart = new Chart(multiLineCtx, multiLineConfig);
 
+  this.notify({
+      title: 'Login bem-sucedido',
+      text: 'Bem-vindo de volta.',
+      type: 'success',
+      duration: 5000 // Tempo em milissegundos que a notificação ficará visível
+    });
   },
   beforeUnmount() {
     // Destruir os gráficos antes de desmontar o componente para evitar vazamentos de memória

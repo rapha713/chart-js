@@ -1,42 +1,59 @@
 <template>
-    <div class="navbar">
-      <div class="navbar-title" style="cursor: default;">{{ title }}</div>
-      <div class="profile" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false">
-        <button class="dropdown-button">
-          <i class="fa fa-fw fa-user"></i> <!-- Ícone de perfil -->
-          ▼
-        </button>
-        <div class="dropdown-content" v-if="showDropdown">
-          <a href="#" @click.prevent="logout">Logout</a>
-        </div>
+  <div class="navbar">
+    <div class="navbar-title" style="cursor: default;">{{ title }}</div>
+    <div class="profile" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false">
+      <button class="dropdown-button">
+        <i class="fa fa-fw fa-user"></i> <!-- Ícone de perfil -->
+        ▼
+      </button>
+      <div class="dropdown-content" v-if="showDropdown">
+        <a href="#" @click.prevent="logout">Logout</a>
       </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'NavbarComponent',
-    props: {
-      title: {
-        type: String,
-        default: 'Dashboard'
-      }
-    },
-    data() {
-      return {
-        showDropdown: false
-      }
-    },
-    methods: {
-      logout() {
-        // Lógica de logout aqui
-        alert('Logout realizado!');
-      }
+  </div>
+</template>
+
+<script>
+import { useRouter } from 'vue-router';
+import { useNotification } from '@kyvg/vue3-notification';
+
+export default {
+  name: 'NavbarComponent',
+  props: {
+    title: {
+      type: String,
+      default: 'Dashboard'
     }
+  },
+  data() {
+    return {
+      showDropdown: false
+    };
+  },
+  setup() {
+    const router = useRouter();
+    const { notify } = useNotification();
+    return {
+      router,
+      notify
+    };
+  },
+  methods: {
+  logout() {
+    this.router.push({ name: 'Login' });
+
+    this.notify({
+      title: 'Logout realizado',
+      text: 'Você foi redirecionado para a página de login.',
+      type: 'error',
+      duration: 5000
+    });
   }
-  </script>
+}
+};
+</script>
   
-  <style scoped>
+<style scoped>
   .navbar {
     display: flex;
     justify-content: space-between;
@@ -66,9 +83,9 @@
 
 .dropdown-content {
   position: absolute;
-  background-color: #1E1E2F;
+  background-color: #46466c;
   min-width: 100px;
-  box-shadow: 0px 8px 16px 0px rgba(12, 12, 18, 0.2);
+  box-shadow: 0px 8px 16px 0px rgba(75, 75, 75, 0.2);
   z-index: 1;
 }
 

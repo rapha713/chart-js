@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar">
-    <a href="/" style="margin-top: 150%;"><i class="fa fa-fw fa-home"></i> Dashboard</a>
+    <a href="/dashboard" style="margin-top: 150%;"><i class="fa fa-fw fa-home"></i> Dashboard</a>
     <div @click="toggleDropdown" class="dropdown">
       <a href="javascript:void(0)" aria-haspopup="true" :aria-expanded="dropdownVisible">
         <i class="fa fa-fw fa-th"></i> Dados
