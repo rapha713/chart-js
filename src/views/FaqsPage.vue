@@ -113,11 +113,18 @@ export default {
   },
   methods: {
     async fetchFAQs() {
-        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/faqs');
+      const token = localStorage.getItem('token');
+      const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/faqs`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+        });
         if (response.ok) {
             this.faqs = (await response.json()).map(faq => ({
                 ...faq,
-                isExpanded: false // Inicializa como não expandido
+                isExpanded: false
             }));
         } else {
             console.error('Erro ao buscar FAQs:', response.statusText);
@@ -150,9 +157,11 @@ export default {
       this.showModal = true;
     },
     async addFAQ() {
-      const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/faqs/add', {
+      const token = localStorage.getItem('token');
+      const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/faqs/add', {
         method: 'POST',
         headers: {
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(this.form)
@@ -182,9 +191,11 @@ export default {
         ativa: this.form.ativa
       });
       
-      const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/faqs/edit', {
+      const token = localStorage.getItem('token');
+      const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/faqs/edit', {
         method: 'PUT',
         headers: {
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -223,9 +234,11 @@ export default {
     async deleteFAQ() {
       if (this.codPerguntaToDelete) {
         console.log('Cod Pergunta para deletar:', this.codPerguntaToDelete);
-        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/faqs/delete', {
+        const token = localStorage.getItem('token');
+        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/faqs/delete', {
           method: 'POST',
           headers: {
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
@@ -255,9 +268,11 @@ export default {
     async toggleActive(codPergunta, event) {
       const novaAtivacao = event.target.checked ? 'S' : 'N';
       try {
-        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/faqs/toggle', {
+        const token = localStorage.getItem('token');
+        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/faqs/toggle', {
           method: 'POST',
           headers: {
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({ codPergunta, ativa: novaAtivacao })
@@ -317,15 +332,15 @@ export default {
     background-color: #27293D;
   }
   tr, th {
-    background-color: #14141f; /* Cor de fundo do cabeçalho */
+    background-color: #14141f; 
     text-align: center;
-    color: white; /* Cor do texto do cabeçalho */
+    color: white; 
   }
   tr:nth-child(even) {
-    background-color: #46466c; /* Cor de fundo alternada para as linhas */
+    background-color: #46466c; 
   }
   input[type="text"] {
-    width: 100%; /* A largura do input ocupa toda a célula */
+    width: 100%; 
     padding: 8px;
     margin-top: 5px;
     box-sizing: border-box;
@@ -357,10 +372,10 @@ export default {
   margin-bottom: 10px;
   font-weight: bold;
 }
-    th:nth-child(1), td:nth-child(1) { width: 5%; } /* Coluna Id */
-    th:nth-child(2), td:nth-child(2) { width: 20%; } /* Coluna Nome */
-    th:nth-child(3), td:nth-child(3) { width: 30%; } /* Coluna Email */
-    th:nth-child(4), td:nth-child(4) { width: 15%; } /* Coluna Telefone */
+    th:nth-child(1), td:nth-child(1) { width: 5%; } 
+    th:nth-child(2), td:nth-child(2) { width: 20%; } 
+    th:nth-child(3), td:nth-child(3) { width: 30%; }
+    th:nth-child(4), td:nth-child(4) { width: 15%; }
     th:nth-child(5), td:nth-child(5) { width: 15%; }
 
   .container {
@@ -453,6 +468,6 @@ input:checked + .slider:before {
 }
 .no-scroll {
   overflow: hidden;
-  height: 100%; /* Para garantir que a altura do corpo fique fixada */
+  height: 100%;
 }
 </style>

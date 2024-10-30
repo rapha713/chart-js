@@ -93,29 +93,43 @@
         async fetchData() {
     this.loading = true;
     try {
-        const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/api/simulacoes?pageNumber=${this.currentPage}&pageSize=${this.itemsPerPage}`);
-        const data = await response.json();
-        this.offers = data.items;
-        console.log(this.offers); // Verifique se formattedDocument está presente
-        this.totalPages = data.totalPages;
+      const token = localStorage.getItem('token');
+      const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/simulacoes?pageNumber=${this.currentPage}&pageSize=${this.itemsPerPage}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+      const data = await response.json();
+      this.offers = data.items;
+      console.log(this.offers);
+      this.totalPages = data.totalPages;
     } catch (error) {
-        console.error("Erro ao buscar dados:", error);
+      console.error("Erro ao buscar dados:", error);
     } finally {
-        this.loading = false;
+      this.loading = false;
     }
 },
       async showDetails(offerId) {
         try {
-          const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/api/simulacoes/${offerId}`);
+          const token = localStorage.getItem('token');
+          const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/simulacoes/${offerId}`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
           const data = await response.json();
           this.selectedOfferDetails = data.html;
-          this.isOffCanvasOpen = true; // Abre o off-canvas
+          this.isOffCanvasOpen = true; 
         } catch (error) {
           console.error("Erro ao buscar detalhes:", error);
         }
       },
       closeOffCanvas() {
-        this.isOffCanvasOpen = false; // Fecha o off-canvas
+        this.isOffCanvasOpen = false;
       },
       nextPage() {
         if (this.currentPage < this.totalPages) {
@@ -161,24 +175,24 @@
   }
   
   th {
-    background-color: #27293D; /* Cor de fundo do cabeçalho */
-    color: white; /* Cor do texto do cabeçalho */
+    background-color: #27293D;
+    color: white;
   }
   
-  th:nth-child(1), td:nth-child(1) { width: 5%; } /* Coluna Id */
-  th:nth-child(2), td:nth-child(2) { width: 28%; } /* Coluna Nome */
-  th:nth-child(3), td:nth-child(3) { width: 28%; } /* Coluna Email */
-  th:nth-child(4), td:nth-child(4) { width: 12%; } /* Coluna Telefone */
-  th:nth-child(5), td:nth-child(5) { width: 17%; } /* Coluna Localização */
-  th:nth-child(6), td:nth-child(6) { width: 15%; } /* Coluna Valor */
-  th:nth-child(7), td:nth-child(7) { width: 5%; } /* Coluna Detalhes */
+  th:nth-child(1), td:nth-child(1) { width: 5%; }
+  th:nth-child(2), td:nth-child(2) { width: 28%; }
+  th:nth-child(3), td:nth-child(3) { width: 28%; }
+  th:nth-child(4), td:nth-child(4) { width: 12%; }
+  th:nth-child(5), td:nth-child(5) { width: 17%; }
+  th:nth-child(6), td:nth-child(6) { width: 15%; }
+  th:nth-child(7), td:nth-child(7) { width: 5%; }
   
   tr:nth-child(even) {
-    background-color: #27293D; /* Cor de fundo alternada para as linhas */
+    background-color: #27293D;
   }
   
   input[type="text"] {
-    width: 100%; /* A largura do input ocupa toda a célula */
+    width: 100%;
     padding: 8px;
     margin-top: 5px;
     box-sizing: border-box;
@@ -205,7 +219,7 @@
 }
   
   .pagination button:disabled {
-    background-color: #14141f; /* Cor do botão desabilitado */
+    background-color: #14141f;
     cursor: not-allowed;
   }
   
@@ -261,7 +275,7 @@
     color: white;
   }
   .fa-info:hover {
-    color: #4eacf0; /* Cor ao passar o mouse */
+    color: #4eacf0;
   }
   h3 {
   color: #42b983;

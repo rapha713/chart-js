@@ -42,11 +42,11 @@ export default {
     };
   },
   setup() {
-    const { notify } = useNotification(); // Usando o hook de notificações
+    const { notify } = useNotification();
     return { notify };
   },
   async mounted() {
-    // Configurações dos gráficos
+
     document.getElementById('simulacao').width = 300;
     document.getElementById('simulacao').height = 200;
 
@@ -59,9 +59,16 @@ export default {
     document.getElementById('multiLineChart').width = 300;
     document.getElementById('multiLineChart').height = 80;
     
+    const token = localStorage.getItem('token');
     // Gráfico de Simulação
     const simulacaoCtx = document.getElementById('simulacao');
-    const simulacaoResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/simulacoes/monthly-counts');
+    const simulacaoResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/simulacoes/monthly-counts', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
     const simulacaoData = await simulacaoResponse.json();
 
     const simulacaoLabels = simulacaoData.map(item => item.month);
@@ -95,7 +102,7 @@ export default {
       },
       legend: {
         labels: {
-          color: 'white', // Altere para a cor desejada
+          color: 'white',
         }
       }
     }
@@ -104,7 +111,13 @@ export default {
 
     // Gráfico de Lance
     const lanceCtx = document.getElementById('lance');
-    const lanceResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/lances/monthly-counts');
+    const lanceResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/lances/monthly-counts', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
     const lanceData = await lanceResponse.json();
 
     const lanceLabels = lanceData.map(item => item.month);
@@ -138,7 +151,7 @@ export default {
       },
       legend: {
         labels: {
-          color: 'white', // Altere para a cor desejada
+          color: 'white',
         }
       }
     }
@@ -149,15 +162,33 @@ export default {
     const contatoCtx = document.getElementById('contato').getContext('2d');
 
     // Buscar dados das APIs
-    const boletoResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/contact/monthly-boleto');
+    const boletoResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/contact/monthly-boleto', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
     const boletoData = await boletoResponse.json();
     const boletoTotals = boletoData.map(item => item.total);
 
-    const workResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/contact/monthly-work');
+    const workResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/contact/monthly-work', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
     const workData = await workResponse.json();
     const workTotals = workData.map(item => item.total);
 
-    const partnerResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/contact/monthly-partner');
+    const partnerResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/contact/monthly-partner', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
     const partnerData = await partnerResponse.json();
     const partnerTotals = partnerData.map(item => item.total);
 
@@ -192,10 +223,10 @@ export default {
 
 // Criar o gráfico de contatos com dados de barras
 this.contatoChart = new Chart(contatoCtx, {
-  type: 'bar', // Altera para gráfico de barras
+  type: 'bar',
   data: {
     labels: this.contatoData.labels,
-    datasets: this.contatoData.datasets, // Exibe todos os conjuntos de dados
+    datasets: this.contatoData.datasets,
   },
   options: {
     responsive: true,
@@ -203,13 +234,13 @@ this.contatoChart = new Chart(contatoCtx, {
       legend: {
         position: 'top',
         labels: {
-          color: 'rgba(255, 255, 255, 1)' // Cor dos labels da legenda (ex: preto)
+          color: 'rgba(255, 255, 255, 1)'
         }
       },
       title: {
         display: true,
         text: 'Contatos',
-        color: 'rgba(255, 255, 255, 1)' // Cor do título (ex: preto)
+        color: 'rgba(255, 255, 255, 1)'
       }
     },
     scales: {
@@ -221,96 +252,107 @@ this.contatoChart = new Chart(contatoCtx, {
 });
 
 
-    // Gráfico de Múltiplas Linhas
-const multiLineCtx = document.getElementById('multiLineChart').getContext('2d');
+  // Gráfico de Múltiplas Linhas
+  const multiLineCtx = document.getElementById('multiLineChart').getContext('2d');
 
-// Buscar dados das APIs
-const offerResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/leads/monthly-offer');
-const offerData = await offerResponse.json();
-const offerTotals = offerData.map(item => item.total);
-const offerLabels = offerData.map(item => item.month);
+  // Buscar dados das APIs
+  const offerResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/leads/monthly-offer', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+  const offerData = await offerResponse.json();
+  const offerTotals = offerData.map(item => item.total);
+  const offerLabels = offerData.map(item => item.month);
 
-const simulationResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/leads/monthly-simulation');
-const simulationData = await simulationResponse.json();
-const simulationTotals = simulationData.map(item => item.total);
+  const simulationResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/leads/monthly-simulation', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+  const simulationData = await simulationResponse.json();
+  const simulationTotals = simulationData.map(item => item.total);
 
-const contactResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/leads/monthly-contact');
-const contactData = await contactResponse.json();
-const contactTotals = contactData.map(item => item.total);
+  const contactResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/leads/monthly-contact', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+  const contactData = await contactResponse.json();
+  const contactTotals = contactData.map(item => item.total);
 
 // Configuração do gráfico de múltiplas linhas com preenchimento
-const multiLineData = {
-  labels: offerLabels,
-  datasets: [
-    {
-      label: 'Ofertas',
-      data: offerTotals,
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      fill: 'origin',
-      tension: 0.4,
-    },
-    {
-      label: 'Simulações',
-      data: simulationTotals,
-      borderColor: 'rgb(54, 162, 235)',
-      backgroundColor: 'rgba(54, 162, 235, 0.5)',
-      fill: '-1',
-      tension: 0.4,
-    },
-    {
-      label: 'Contatos',
-      data: contactTotals,
-      borderColor: 'rgb(75, 192, 192)',
-      backgroundColor: 'rgba(75, 192, 192, 0.5)',
-      fill: 'origin',
-      tension: 0.4,
-    }
-  ]
-};
-
-const multiLineConfig = {
-  type: 'line',
-  data: multiLineData,
-  options: {
-    responsive: true,
-    interaction: {
-      mode: 'index',
-      intersect: false,
-    },
-    stacked: false,
-    plugins: {
-      title: {
-        display: true,
-        text: 'Leads',
-        color: 'white',
+  const multiLineData = {
+    labels: offerLabels,
+    datasets: [
+      {
+        label: 'Ofertas',
+        data: offerTotals,
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        fill: 'origin',
+        tension: 0.4,
       },
-      legend: {
-        labels: {
-          color: 'white', // Altere para a cor desejada
+      {
+        label: 'Simulações',
+        data: simulationTotals,
+        borderColor: 'rgb(54, 162, 235)',
+        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+        fill: '-1',
+        tension: 0.4,
+      },
+      {
+        label: 'Contatos',
+        data: contactTotals,
+        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+        fill: 'origin',
+        tension: 0.4,
+      }
+    ]
+  };
+
+  const multiLineConfig = {
+    type: 'line',
+    data: multiLineData,
+    options: {
+      responsive: true,
+      interaction: {
+        mode: 'index',
+        intersect: false,
+      },
+      stacked: false,
+      plugins: {
+        title: {
+          display: true,
+          text: 'Leads',
+          color: 'white',
+        },
+        legend: {
+          labels: {
+            color: 'white',
+          }
         }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
       }
     },
-    scales: {
-      y: {
-        beginAtZero: true,
-      },
-    }
-  },
-};
+  };
 
-// Criar o gráfico com o contexto
-this.multiLineChart = new Chart(multiLineCtx, multiLineConfig);
-
-  this.notify({
-      title: 'Login bem-sucedido',
-      text: 'Bem-vindo de volta.',
-      type: 'success',
-      duration: 5000 // Tempo em milissegundos que a notificação ficará visível
-    });
+  // Criar o gráfico com o contexto
+  this.multiLineChart = new Chart(multiLineCtx, multiLineConfig);
+  
   },
   beforeUnmount() {
-    // Destruir os gráficos antes de desmontar o componente para evitar vazamentos de memória
     if (this.simulacaoChart) {
       this.simulacaoChart.destroy();
     }
@@ -329,7 +371,7 @@ this.multiLineChart = new Chart(multiLineCtx, multiLineConfig);
 
 <style scoped>
 .container {
-  padding: 10px; /* Adiciona algum espaço ao redor do conteúdo */
+  padding: 10px;
   margin-top: 15px;
   width: 100rem;
   background-color: #27293D;
@@ -352,11 +394,11 @@ a {
   color: #42b983;
 }
 .row {
-  padding-bottom: 5.1rem; /* Ajuste o valor conforme necessário */
+  padding-bottom: 5.1rem;
 }
 canvas {
   width: 100%;
-  height: 100%; /* Ajuste o tamanho dos gráficos */
+  height: 100%;
   display: block;
   background-color: #31344c;
 }

@@ -74,7 +74,14 @@
     methods: {
       async fetchConfig() {
         try {
-          const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/config');
+          const token = localStorage.getItem('token');
+          const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/config`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        });
           if (response.ok) {
             this.config = await response.json();
           } else {
@@ -104,10 +111,12 @@
         };
   
         try {
-          const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/config_update', {
+          const token = localStorage.getItem('token');
+          const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/config_update', {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify(updateData),
           });

@@ -94,11 +94,18 @@
         async fetchData() {
     this.loading = true;
     try {
-        const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/api/lances?pageNumber=${this.currentPage}&pageSize=${this.itemsPerPage}`);
-        const data = await response.json();
-        this.offers = data.items;
-        console.log(this.offers); // Verifique se formattedDocument está presente
-        this.totalPages = data.totalPages;
+      const token = localStorage.getItem('token');
+      const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/lances?pageNumber=${this.currentPage}&pageSize=${this.itemsPerPage}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+      this.offers = data.items;
+      console.log(this.offers); 
+      this.totalPages = data.totalPages;
     } catch (error) {
         console.error("Erro ao buscar dados:", error);
     } finally {
@@ -107,16 +114,23 @@
 },
       async showDetails(offerId) {
         try {
-          const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/api/lances/${offerId}`);
+          const token = localStorage.getItem('token');
+          const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/lances/${offerId}`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
           const data = await response.json();
           this.selectedOfferDetails = data.html;
-          this.isOffCanvasOpen = true; // Abre o off-canvas
+          this.isOffCanvasOpen = true;
         } catch (error) {
           console.error("Erro ao buscar detalhes:", error);
         }
       },
       closeOffCanvas() {
-        this.isOffCanvasOpen = false; // Fecha o off-canvas
+        this.isOffCanvasOpen = false;
       },
       nextPage() {
         if (this.currentPage < this.totalPages) {
@@ -168,25 +182,25 @@ h3 {
   }
   
   th {
-    background-color: #27293D; /* Cor de fundo do cabeçalho */
-    color: white; /* Cor do texto do cabeçalho */
+    background-color: #27293D; 
+    color: white;
   }
   
-  th:nth-child(1), td:nth-child(1) { width: 6%; } /* Coluna Grupo */
-  th:nth-child(2), td:nth-child(2) { width: 6%; } /* Coluna Cota */
-  th:nth-child(3), td:nth-child(3) { width: 28%; } /* Coluna Nome */
-  th:nth-child(4), td:nth-child(4) { width: 28%; } /* Coluna Email */
-  th:nth-child(5), td:nth-child(5) { width: 13%; } /* Coluna Documento */
-  th:nth-child(6), td:nth-child(6) { width: 10%; } /* Coluna Tipo */
-  th:nth-child(7), td:nth-child(7) { width: 13%; } /* Coluna Valor */
-  th:nth-child(8), td:nth-child(8) { width: 5%; } /* Coluna Detalhes */
+  th:nth-child(1), td:nth-child(1) { width: 6%; } 
+  th:nth-child(2), td:nth-child(2) { width: 6%; } 
+  th:nth-child(3), td:nth-child(3) { width: 28%; } 
+  th:nth-child(4), td:nth-child(4) { width: 28%; } 
+  th:nth-child(5), td:nth-child(5) { width: 13%; }
+  th:nth-child(6), td:nth-child(6) { width: 10%; } 
+  th:nth-child(7), td:nth-child(7) { width: 13%; } 
+  th:nth-child(8), td:nth-child(8) { width: 5%; } 
   
   tr:nth-child(even) {
-    background-color: #27293D; /* Cor de fundo alternada para as linhas */
+    background-color: #27293D; 
   }
   
   input[type="text"] {
-    width: 100%; /* A largura do input ocupa toda a célula */
+    width: 100%; 
     padding: 8px;
     margin-top: 5px;
     box-sizing: border-box;
@@ -213,7 +227,7 @@ h3 {
 }
   
   .pagination button:disabled {
-    background-color: #14141f; /* Cor do botão desabilitado */
+    background-color: #14141f; 
     cursor: not-allowed;
   }
   
@@ -269,6 +283,6 @@ h3 {
     color: white;
   }
   .fa-info:hover {
-    color: #4eacf0; /* Cor ao passar o mouse */
+    color: #4eacf0; 
   }
   </style>

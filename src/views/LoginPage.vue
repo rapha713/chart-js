@@ -44,7 +44,7 @@
     </div>
   </template>
   
-  <script>
+<script>
   export default {
     data() {
       return {
@@ -55,31 +55,39 @@
       };
     },
     methods: {
-        async login() {
-  this.errorMessage = ""; // Limpar mensagens de erro antes de uma nova tentativa
-  try {
-    const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+      async login() {
+        this.errorMessage = "";
+        this.validateEmail();
+        this.validatePassword();
+  
+        if (this.email.error || this.password.error) {
+          this.errorMessage = "Por favor, preencha todos os campos.";
+          return;
+        }
+  
+        try {
+          const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: this.email.value, senha: this.password.value }),
+          });
+  
+          if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('isAuthenticated', 'true');
+            this.$router.push({ name: 'Dashboard' });
+          } else {
+            const errorData = await response.json();
+            this.errorMessage = errorData.message || 'Erro desconhecido. Tente novamente.';
+          }
+        } catch (error) {
+          console.error('Erro ao fazer login:', error);
+          this.errorMessage = 'Erro ao conectar ao servidor.';
+        }
       },
-      body: JSON.stringify({ email: this.email.value, senha: this.password.value }),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      localStorage.setItem('token', data.token); // Armazene o token se necessário
-      localStorage.setItem('isAuthenticated', 'true'); // Atualiza o estado de autenticação
-      this.$router.push({ name: 'Dashboard' });
-    } else {
-      const errorData = await response.json();
-      this.errorMessage = errorData.message || 'Erro desconhecido. Tente novamente.';
-    }
-  } catch (error) {
-    console.error('Erro ao fazer login:', error);
-    this.errorMessage = 'Erro ao conectar ao servidor.';
-  }
-},
       validateEmail() {
         this.email.error = !this.email.value;
       },
@@ -93,11 +101,11 @@
       }
     }
   };
-  </script>
+</script>  
   
   <style lang="scss">
   .login-page {
-    height: 100vh; /* Ocupa toda a altura da tela */
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -47,6 +47,14 @@
               <input type="email" v-model="form.email" id="email" class="form-control" required style="margin-bottom: 15px;">
             </div>
             <div class="form-group">
+              <label for="role">Função</label>
+              <select v-model="form.role" id="role" class="form-control" required style="margin-bottom: 15px;">
+                <option disabled value="">Selecione uma função</option>
+                <option value="Admin">Admin</option>
+                <option value="User">User</option>
+              </select>
+            </div>
+            <div class="form-group">
               <label for="password">Senha</label>
               <div>
                 <input
@@ -85,144 +93,159 @@
     </div>
   </template>
   
-  <script>
-import UserModal from '../components/UserModal.vue';
-import { notify } from '@kyvg/vue3-notification';
-
-export default {
-  name: 'UserManagement',
-  components: {
-    UserModal,
-  },
-  data() {
-    return {
-      users: [],
-      showModal: false,
-      isEdit: false,
-      showPassword: false,
-      isOffCanvasOpen: false,
-      adminPassword: '',
-      userIdToDelete: null,
-      form: {
-        id: 0,
-        full_Name: '',
-        email: '',
-        username: '',
-        password: '',
-        adminPassword: '',
-      }
-    };
-  },
-  async mounted() {
-    await this.fetchUsers();
-  },
-  methods: {
-    async fetchUsers() {
-      try {
-        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/users');
-        if (response.ok) {
-          this.users = await response.json();
-        } else {
-          throw new Error(response.statusText);
-        }
-      } catch (error) {
-        notify({ type: 'error', title: 'Erro', text: `Erro ao buscar usuários: ${error.message}` });
-      }
+<script>
+  import UserModal from '../components/UserModal.vue';
+  import { notify } from '@kyvg/vue3-notification';
+  
+  export default {
+    name: 'UserManagement',
+    components: {
+      UserModal,
     },
-    openModal() {
-      this.showModal = true;
-      this.isEdit = false;
-      this.showPassword = false;
-      this.form = {
-        id: 0,
-        full_Name: '',
-        email: '',
-        username: '',
-        password: '',
+    data() {
+      return {
+        users: [],
+        showModal: false,
+        isEdit: false,
+        showPassword: false,
+        isOffCanvasOpen: false,
         adminPassword: '',
+        userIdToDelete: null,
+        form: {
+          id: 0,
+          full_Name: '',
+          email: '',
+          username: '',
+          password: '',
+          role: '',
+          adminPassword: '',
+        }
       };
     },
-    closeModal() {
-      this.showModal = false;
+    async mounted() {
+      await this.fetchUsers();
     },
-    editUser(user) {
-      this.isEdit = true;
-      this.form = { ...user };
-      this.showModal = true;
-    },
-    async addUser() {
-      try {
-        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/users/add', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(this.form)
-        });
-        if (response.ok) {
-          await this.fetchUsers();
-          this.closeModal();
-          notify({ type: 'success', title: 'Sucesso', text: 'Usuário adicionado com sucesso!' });
-        } else {
-          throw new Error(response.statusText);
-        }
-      } catch (error) {
-        notify({ type: 'error', title: 'Erro', text: `Erro ao adicionar usuário: ${error.message}` });
-      }
-    },
-    async updateUser() {
-      try {
-        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/users/update', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(this.form)
-        });
-        if (response.ok) {
-          await this.fetchUsers();
-          this.closeModal();
-          notify({ type: 'success', title: 'Sucesso', text: 'Usuário atualizado com sucesso!' });
-        } else {
-          throw new Error(response.statusText);
-        }
-      } catch (error) {
-        notify({ type: 'error', title: 'Erro', text: `Erro ao atualizar usuário: ${error.message}` });
-      }
-    },
-    confirmDelete(id) {
-      this.userIdToDelete = id;
-      this.isOffCanvasOpen = true; // Abre o off-canvas
-    },
-    closeOffCanvas() {
-      this.isOffCanvasOpen = false; // Fecha o off-canvas
-      this.adminPassword = ''; // Resetar a senha ao fechar
-    },
-    async deleteUser() {
-      if (this.userIdToDelete) {
+    methods: {
+      async fetchUsers() {
         try {
-          const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/users/deleteWithPassword', {
-            method: 'POST',
+          const token = localStorage.getItem('token');
+          const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/users`, {
+            method: 'GET',
             headers: {
+              'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ id: this.userIdToDelete, password: this.adminPassword })
           });
           if (response.ok) {
-            await this.fetchUsers();
-            notify({ type: 'success', title: 'Sucesso', text: 'Usuário excluído com sucesso!' });
+            this.users = await response.json();
           } else {
             throw new Error(response.statusText);
           }
         } catch (error) {
-          notify({ type: 'error', title: 'Erro', text: `Erro ao deletar usuário: ${error.message}` });
+          notify({ type: 'error', title: 'Erro', text: `Erro ao buscar usuários: ${error.message}` });
         }
+      },
+      openModal() {
+        this.showModal = true;
+        this.isEdit = false;
+        this.showPassword = false;
+        this.form = {
+          id: 0,
+          full_Name: '',
+          email: '',
+          username: '',
+          password: '',
+          role: '',
+          adminPassword: '',
+        };
+      },
+      closeModal() {
+        this.showModal = false;
+      },
+      editUser(user) {
+        this.isEdit = true;
+        this.form = { ...user };
+        this.showModal = true;
+      },
+      async addUser() {
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/users/add', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.form)
+          });
+          if (response.ok) {
+            await this.fetchUsers();
+            this.closeModal();
+            notify({ type: 'success', title: 'Sucesso', text: 'Usuário adicionado com sucesso!' });
+          } else {
+            throw new Error(response.statusText);
+          }
+        } catch (error) {
+          notify({ type: 'error', title: 'Erro', text: `Erro ao adicionar usuário: ${error.message}` });
+        }
+      },
+      async updateUser() {
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/users/update', {
+            method: 'PUT',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.form)
+          });
+          if (response.ok) {
+            await this.fetchUsers();
+            this.closeModal();
+            notify({ type: 'success', title: 'Sucesso', text: 'Usuário atualizado com sucesso!' });
+          } else {
+            throw new Error(response.statusText);
+          }
+        } catch (error) {
+          notify({ type: 'error', title: 'Erro', text: `Erro ao atualizar usuário: ${error.message}` });
+        }
+      },
+      confirmDelete(id) {
+        this.userIdToDelete = id;
+        this.isOffCanvasOpen = true;
+      },
+      closeOffCanvas() {
+        this.isOffCanvasOpen = false;
+        this.adminPassword = '';
+      },
+      async deleteUser() {
+        if (this.userIdToDelete) {
+          try {
+            const token = localStorage.getItem('token');
+            const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/users/deleteWithPassword', {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ id: this.userIdToDelete, password: this.adminPassword })
+            });
+            if (response.ok) {
+              await this.fetchUsers();
+              notify({ type: 'success', title: 'Sucesso', text: 'Usuário excluído com sucesso!' });
+            } else {
+              throw new Error(response.statusText);
+            }
+          } catch (error) {
+            notify({ type: 'error', title: 'Erro', text: `Erro ao deletar usuário: ${error.message}` });
+          }
+        }
+        this.closeOffCanvas();
       }
-      this.closeOffCanvas(); // Fecha o off-canvas após a exclusão
     }
-  }
-};
-</script>
+  };
+</script>  
   
   <style scoped>
   .container {
@@ -249,15 +272,15 @@ export default {
     background-color: #27293D;
   }
   tr, th {
-    background-color: #14141f; /* Cor de fundo do cabeçalho */
+    background-color: #14141f;
     text-align: center;
-    color: white; /* Cor do texto do cabeçalho */
+    color: white;
   }
   tr:nth-child(even) {
-    background-color: #46466c; /* Cor de fundo alternada para as linhas */
+    background-color: #46466c;
   }
   input[type="text"] {
-    width: 100%; /* A largura do input ocupa toda a célula */
+    width: 100%;
     padding: 8px;
     margin-top: 5px;
     box-sizing: border-box;
@@ -289,10 +312,10 @@ export default {
   margin-bottom: 10px;
   font-weight: bold;
 }
-    th:nth-child(1), td:nth-child(1) { width: 5%; } /* Coluna Id */
-    th:nth-child(2), td:nth-child(2) { width: 20%; } /* Coluna Nome */
-    th:nth-child(3), td:nth-child(3) { width: 30%; } /* Coluna Email */
-    th:nth-child(4), td:nth-child(4) { width: 15%; } /* Coluna Telefone */
+    th:nth-child(1), td:nth-child(1) { width: 5%; }
+    th:nth-child(2), td:nth-child(2) { width: 20%; }
+    th:nth-child(3), td:nth-child(3) { width: 30%; }
+    th:nth-child(4), td:nth-child(4) { width: 15%; }
     th:nth-child(5), td:nth-child(5) { width: 15%; }
 
   .container {
