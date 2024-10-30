@@ -58,7 +58,7 @@
         async login() {
   this.errorMessage = ""; // Limpar mensagens de erro antes de uma nova tentativa
   try {
-    const response = await fetch('https://localhost:7290/api/login', {
+    const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

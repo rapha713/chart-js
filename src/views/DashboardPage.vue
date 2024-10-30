@@ -61,7 +61,7 @@ export default {
     
     // Gráfico de Simulação
     const simulacaoCtx = document.getElementById('simulacao');
-    const simulacaoResponse = await fetch('https://localhost:7290/api/simulacoes/monthly-counts');
+    const simulacaoResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/simulacoes/monthly-counts');
     const simulacaoData = await simulacaoResponse.json();
 
     const simulacaoLabels = simulacaoData.map(item => item.month);
@@ -104,7 +104,7 @@ export default {
 
     // Gráfico de Lance
     const lanceCtx = document.getElementById('lance');
-    const lanceResponse = await fetch('https://localhost:7290/api/lances/monthly-counts');
+    const lanceResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/lances/monthly-counts');
     const lanceData = await lanceResponse.json();
 
     const lanceLabels = lanceData.map(item => item.month);
@@ -149,15 +149,15 @@ export default {
     const contatoCtx = document.getElementById('contato').getContext('2d');
 
     // Buscar dados das APIs
-    const boletoResponse = await fetch('https://localhost:7290/api/contact/monthly-boleto');
+    const boletoResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/contact/monthly-boleto');
     const boletoData = await boletoResponse.json();
     const boletoTotals = boletoData.map(item => item.total);
 
-    const workResponse = await fetch('https://localhost:7290/api/contact/monthly-work');
+    const workResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/contact/monthly-work');
     const workData = await workResponse.json();
     const workTotals = workData.map(item => item.total);
 
-    const partnerResponse = await fetch('https://localhost:7290/api/contact/monthly-partner');
+    const partnerResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/contact/monthly-partner');
     const partnerData = await partnerResponse.json();
     const partnerTotals = partnerData.map(item => item.total);
 
@@ -225,16 +225,16 @@ this.contatoChart = new Chart(contatoCtx, {
 const multiLineCtx = document.getElementById('multiLineChart').getContext('2d');
 
 // Buscar dados das APIs
-const offerResponse = await fetch('https://localhost:7290/api/leads/monthly-offer');
+const offerResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/leads/monthly-offer');
 const offerData = await offerResponse.json();
 const offerTotals = offerData.map(item => item.total);
 const offerLabels = offerData.map(item => item.month);
 
-const simulationResponse = await fetch('https://localhost:7290/api/leads/monthly-simulation');
+const simulationResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/leads/monthly-simulation');
 const simulationData = await simulationResponse.json();
 const simulationTotals = simulationData.map(item => item.total);
 
-const contactResponse = await fetch('https://localhost:7290/api/leads/monthly-contact');
+const contactResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/leads/monthly-contact');
 const contactData = await contactResponse.json();
 const contactTotals = contactData.map(item => item.total);
 

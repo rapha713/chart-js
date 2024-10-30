@@ -113,7 +113,7 @@ export default {
   },
   methods: {
     async fetchFAQs() {
-        const response = await fetch('https://localhost:7290/api/faqs');
+        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/faqs');
         if (response.ok) {
             this.faqs = (await response.json()).map(faq => ({
                 ...faq,
@@ -150,7 +150,7 @@ export default {
       this.showModal = true;
     },
     async addFAQ() {
-      const response = await fetch('https://localhost:7290/api/faqs/add', {
+      const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/faqs/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -182,7 +182,7 @@ export default {
         ativa: this.form.ativa
       });
       
-      const response = await fetch('https://localhost:7290/api/faqs/edit', {
+      const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/faqs/edit', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -223,7 +223,7 @@ export default {
     async deleteFAQ() {
       if (this.codPerguntaToDelete) {
         console.log('Cod Pergunta para deletar:', this.codPerguntaToDelete);
-        const response = await fetch('https://localhost:7290/api/faqs/delete', {
+        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/faqs/delete', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -255,7 +255,7 @@ export default {
     async toggleActive(codPergunta, event) {
       const novaAtivacao = event.target.checked ? 'S' : 'N';
       try {
-        const response = await fetch('https://localhost:7290/api/faqs/toggle', {
+        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/faqs/toggle', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

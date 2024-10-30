@@ -93,7 +93,7 @@
         async fetchData() {
     this.loading = true;
     try {
-        const response = await fetch(`https://localhost:7290/api/simulacoes?pageNumber=${this.currentPage}&pageSize=${this.itemsPerPage}`);
+        const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/api/simulacoes?pageNumber=${this.currentPage}&pageSize=${this.itemsPerPage}`);
         const data = await response.json();
         this.offers = data.items;
         console.log(this.offers); // Verifique se formattedDocument está presente
@@ -106,7 +106,7 @@
 },
       async showDetails(offerId) {
         try {
-          const response = await fetch(`https://localhost:7290/api/simulacoes/${offerId}`);
+          const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/api/simulacoes/${offerId}`);
           const data = await response.json();
           this.selectedOfferDetails = data.html;
           this.isOffCanvasOpen = true; // Abre o off-canvas

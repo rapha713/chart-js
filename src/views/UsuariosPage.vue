@@ -119,7 +119,7 @@ export default {
   methods: {
     async fetchUsers() {
       try {
-        const response = await fetch('https://localhost:7290/api/users');
+        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/users');
         if (response.ok) {
           this.users = await response.json();
         } else {
@@ -152,7 +152,7 @@ export default {
     },
     async addUser() {
       try {
-        const response = await fetch('https://localhost:7290/api/users/add', {
+        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/users/add', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -172,7 +172,7 @@ export default {
     },
     async updateUser() {
       try {
-        const response = await fetch('https://localhost:7290/api/users/update', {
+        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/users/update', {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
@@ -201,7 +201,7 @@ export default {
     async deleteUser() {
       if (this.userIdToDelete) {
         try {
-          const response = await fetch('https://localhost:7290/api/users/deleteWithPassword', {
+          const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/users/deleteWithPassword', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

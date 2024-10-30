@@ -84,7 +84,7 @@ export default {
     async fetchData() {
       this.loading = true;
       try {
-        const response = await fetch(`https://localhost:7290/api/contact?pageNumber=${this.currentPage}&pageSize=${this.itemsPerPage}`);
+        const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/api/contact?pageNumber=${this.currentPage}&pageSize=${this.itemsPerPage}`);
         const data = await response.json();
         this.contacts = data.items;
         this.totalPages = data.totalPages;
@@ -96,7 +96,7 @@ export default {
     },
     async showDetails(contactId) {
       try {
-        const response = await fetch(`https://localhost:7290/api/contact/${contactId}`);
+        const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/api/contact/${contactId}`);
         const data = await response.json();
         this.selectedContactDetails = data.html;
         this.isOffCanvasOpen = true; // Abre o off-canvas

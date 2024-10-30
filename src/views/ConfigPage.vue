@@ -74,7 +74,7 @@
     methods: {
       async fetchConfig() {
         try {
-          const response = await fetch('https://localhost:7290/api/config');
+          const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/config');
           if (response.ok) {
             this.config = await response.json();
           } else {
@@ -104,7 +104,7 @@
         };
   
         try {
-          const response = await fetch('https://localhost:7290/api/config_update', {
+          const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/api/config_update', {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
