@@ -24,11 +24,9 @@
           <p class="text-zinc-700 font-regular text-[13px] mb-0">Dashboard</p>
         </router-link>
       </li>
-      <li>
-        <a @click="dados_nav_visible = !dados_nav_visible"
-          class="p-2 flex flex-col justify-center items-center cursor-pointer">
-          <svg width="38px" height="38px" viewBox="0 0 24.00 24.00" fill="none" xmlns="http://www.w3.org/2000/svg"
-            stroke="#000000" stroke-width="0.00024000000000000003">
+      <li @mouseover="dados_nav_visible = true">
+        <a class="p-2 flex flex-col justify-center items-center cursor-pointer">
+          <svg width="38px" height="38px" viewBox="0 0 24.00 24.00" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="0.00024000000000000003">
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC"
               stroke-width="0.096"></g>
@@ -106,12 +104,13 @@
     </ul>
   </div>
 
-  <div class="w-fit flex h-screen items-start fixed z-[900] dados_nav bg-slate-50"
-    :class="{ 'visivel': dados_nav_visible }">
-    <ul class="menu p-[3px] h-full px-2 py-4">
-      <li>
-        <router-link to="/contatos" class="p-2 flex flex-col justify-center items-center">
-          <svg width="38px" height="38px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Menu Lateral (Dropdown) -->
+  <div class="w-fit flex h-screen items-start fixed z-[900] dados_nav bg-slate-50 transition-all duration-300"
+    :class="{ 'visivel': dados_nav_visible }" @mouseleave="dados_nav_visible = false">
+  <ul class="menu p-[3px] h-full px-2 py-4">
+    <li>
+      <router-link to="/contatos" class="p-2 flex flex-col justify-center items-center">
+        <svg width="38px" height="38px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
             <g id="SVGRepo_iconCarrier">
@@ -121,12 +120,12 @@
               </path>
             </g>
           </svg>
-          <p class="text-zinc-700 font-semibold text-[13px] mb-0">Contatos</p>
-        </router-link>
-      </li>
-      <li>
-        <router-link to="/lances" class="p-2 flex flex-col justify-center items-center">
-          <svg fill="#46494e" height="38px" width="38px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+        <p class="text-zinc-700 font-semibold text-[13px] mb-0">Contatos</p>
+      </router-link>
+    </li>
+    <li>
+      <router-link to="/lances" class="p-2 flex flex-col justify-center items-center">
+        <svg fill="#46494e" height="38px" width="38px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512.00 512.00" xml:space="preserve" stroke="#46494e"
             stroke-width="0.00512">
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -148,12 +147,13 @@
               </g>
             </g>
           </svg>
-          <p class="text-zinc-700 font-semibold text-[13px] mb-0">Lances</p>
-        </router-link>
-      </li>
-      <li>
-        <router-link to="/simulacoes" class="p-2 flex flex-col justify-center items-center">
-          <svg width="38px" height="38px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <p class="text-zinc-700 font-semibold text-[13px] mb-0">Lances</p>
+      </router-link>
+    </li>
+    <li>
+      <router-link to="/simulacoes" class="p-2 flex flex-col justify-center items-center">
+        <svg width="38px" height="38px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
             <g id="SVGRepo_iconCarrier">
@@ -162,14 +162,11 @@
                 fill="#46494e"></path>
             </g>
           </svg>
-          <p class="text-zinc-700 font-semibold text-[13px] mb-0">Simulações</p>
-        </router-link>
-      </li>
-    </ul>
-  </div>
-
-
-
+        <p class="text-zinc-700 font-semibold text-[13px] mb-0">Simulações</p>
+      </router-link>
+    </li>
+  </ul>
+</div>
 </template>
 
 <script>

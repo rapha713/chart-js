@@ -95,7 +95,7 @@
         try {
           const token = localStorage.getItem('token');
           const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/config_update', {
-            method: 'PUT',
+            method: 'POST',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`,
