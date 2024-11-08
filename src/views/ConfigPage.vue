@@ -57,7 +57,7 @@
       async fetchConfig() {
         try {
           const token = localStorage.getItem('token');
-          const response = await fetch(`https://localhost:7290/config`, {
+          const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/config`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -94,7 +94,7 @@
   
         try {
           const token = localStorage.getItem('token');
-          const response = await fetch('https://localhost:7290/config_update', {
+          const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/config_update', {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',

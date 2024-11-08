@@ -82,7 +82,7 @@ export default {
     const token = localStorage.getItem('token');
     // Gráfico de Simulação
     const simulacaoCtx = document.getElementById('simulacao');
-    const simulacaoResponse = await fetch('https://localhost:7290/simulacoes/monthly-counts', {
+    const simulacaoResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/simulacoes/monthly-counts', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -145,7 +145,7 @@ export default {
 
     // Gráfico de Lance
     const lanceCtx = document.getElementById('lance');
-    const lanceResponse = await fetch('https://localhost:7290/lances/monthly-counts', {
+    const lanceResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/lances/monthly-counts', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -207,7 +207,7 @@ export default {
     const contatoCtx = document.getElementById('contato').getContext('2d');
 
     // Buscar dados das APIs
-    const boletoResponse = await fetch('https://localhost:7290/contact/monthly-boleto', {
+    const boletoResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/contact/monthly-boleto', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -217,7 +217,7 @@ export default {
     const boletoData = await boletoResponse.json();
     const boletoTotals = boletoData.map(item => item.total);
 
-    const workResponse = await fetch('https://localhost:7290/contact/monthly-work', {
+    const workResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/contact/monthly-work', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -227,7 +227,7 @@ export default {
     const workData = await workResponse.json();
     const workTotals = workData.map(item => item.total);
 
-    const partnerResponse = await fetch('https://localhost:7290/contact/monthly-partner', {
+    const partnerResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/contact/monthly-partner', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -314,7 +314,7 @@ export default {
     const multiLineCtx = document.getElementById('multiLineChart').getContext('2d');
 
     // Buscar dados das APIs
-    const offerResponse = await fetch('https://localhost:7290/leads/monthly-offer', {
+    const offerResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/leads/monthly-offer', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -325,7 +325,7 @@ export default {
     const offerTotals = offerData.map(item => item.total);
     const offerLabels = offerData.map(item => item.month);
 
-    const simulationResponse = await fetch('https://localhost:7290/leads/monthly-simulation', {
+    const simulationResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/leads/monthly-simulation', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -335,7 +335,7 @@ export default {
     const simulationData = await simulationResponse.json();
     const simulationTotals = simulationData.map(item => item.total);
 
-    const contactResponse = await fetch('https://localhost:7290/leads/monthly-contact', {
+    const contactResponse = await fetch('https://restrito.consorcioapice.com.br/apiadmin/leads/monthly-contact', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,

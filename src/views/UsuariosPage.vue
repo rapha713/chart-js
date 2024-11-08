@@ -152,7 +152,7 @@ export default {
     async fetchUsers() {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`https://localhost:7290/users`, {
+        const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/users`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -193,7 +193,7 @@ export default {
     async addUser() {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('https://localhost:7290/users/add', {
+        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/users/add', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -215,7 +215,7 @@ export default {
     async updateUser() {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('https://localhost:7290/users/update', {
+        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/users/update', {
           method: 'PUT',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -246,7 +246,7 @@ export default {
       if (this.userIdToDelete) {
         try {
           const token = localStorage.getItem('token');
-          const response = await fetch('https://localhost:7290/users/deleteWithPassword', {
+          const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/users/deleteWithPassword', {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${token}`,

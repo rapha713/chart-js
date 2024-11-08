@@ -183,7 +183,7 @@ export default {
   methods: {
     async fetchFAQs() {
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://localhost:7290/faqs`, {
+      const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/faqs`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -227,7 +227,7 @@ export default {
     },
     async addFAQ() {
       const token = localStorage.getItem('token');
-      const response = await fetch('https://localhost:7290/faqs/add', {
+      const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/faqs/add', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -255,7 +255,7 @@ export default {
     async updateFAQ() {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('https://localhost:7290/faqs/edit', {
+        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/faqs/edit', {
           method: 'PUT',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -307,7 +307,7 @@ export default {
       if (this.codPerguntaToDelete) {
         console.log('Cod Pergunta para deletar:', this.codPerguntaToDelete);
         const token = localStorage.getItem('token');
-        const response = await fetch('https://localhost:7290/faqs/delete', {
+        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/faqs/delete', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -341,7 +341,7 @@ export default {
       const novaAtivacao = event.target.checked ? 'S' : 'N';
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('https://localhost:7290/faqs/toggle', {
+        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/faqs/toggle', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,

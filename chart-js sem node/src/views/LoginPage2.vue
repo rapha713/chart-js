@@ -66,7 +66,7 @@
         }
   
         try {
-          const response = await fetch('https://localhost:7290/login', {
+          const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/login', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

@@ -121,7 +121,7 @@ export default {
       this.loading = true;
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`https://localhost:7290/lances?pageNumber=${this.currentPage}&pageSize=${this.itemsPerPage}`, {
+        const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/lances?pageNumber=${this.currentPage}&pageSize=${this.itemsPerPage}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -141,7 +141,7 @@ export default {
     async showDetails(offerId) {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`https://localhost:7290/lances/${offerId}`, {
+        const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/lances/${offerId}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,

@@ -118,7 +118,7 @@
   
       async fetchValues() {
         const token = localStorage.getItem('token');
-        const response = await fetch('https://localhost:7290/values', {
+        const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/values', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -179,7 +179,7 @@
       async updateValue() {
         try {
           const token = localStorage.getItem('token');
-          const response = await fetch('https://localhost:7290/values/update', {
+          const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/values/update', {
             method: 'PUT',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -218,7 +218,7 @@
       async addValue() {
         try {
           const token = localStorage.getItem('token');
-          const response = await fetch('https://localhost:7290/values', {
+          const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/values', {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${token}`,
