@@ -1,54 +1,36 @@
 <template>
-    <div class="container">
-      <h2 style="font-weight: bold; color: #42b983;">Configurações</h2>
-  
-      <!-- Campo para "Title" -->
-      <h5 style="font-weight: bold; text-align: left;">Título</h5>
-      <div class="input-container">
-        <i class="fa fa-copyright icon"></i>
-        <input v-model="config.title" class="input-field" type="text" placeholder="Título" />
-        <button @click="updateConfigField('title')" class="btn">Atualizar</button>
+  <div class="container bg-white" style=" margin-top: 15px;">
+      <div class="w-full flex px-8 justify-between pb-2 items-center">
+        <div class="flex flex-col items-start justify-start py-2">
+          <h3 class="mb-0 text-gray-800 font-bold">Configurações</h3>
+          <p class="m-0 text-gray-600">Adicione ou exclua Emails</p>
+        </div>
       </div>
-  
-      <!-- Campo para "Description" -->
-      <h5 style="font-weight: bold; text-align: left;">Descrição</h5>
-      <div class="input-container">
-        <i class="fa fa-tag icon"></i>
-        <input v-model="config.description" class="input-field" type="text" placeholder="Descrição" />
-        <button @click="updateConfigField('description')" class="btn">Atualizar</button>
-      </div>
-  
-      <!-- Campo para "Keywords" -->
-      <h5 style="font-weight: bold; text-align: left;">Palavras-chave</h5>
-      <div class="input-container">
-        <i class="fa fa-key icon"></i>
-        <input v-model="config.keywords" class="input-field" type="text" placeholder="Palavras-chave" />
-        <button @click="updateConfigField('keywords')" class="btn">Atualizar</button>
-      </div>
-  
-      <!-- Campo para "Simulation Emails" -->
-      <h5 style="font-weight: bold; text-align: left;">Emails de Simulação</h5>
-      <div class="input-container">
-        <i class="fa fa-calculator icon"></i>
-        <input v-model="config.simulationEmails" class="input-field" type="text" placeholder="Emails de Simulação" />
-        <button @click="updateConfigField('simulationEmails')" class="btn">Atualizar</button>
-      </div>
-  
-      <!-- Campo para "Bid Emails" -->
-      <h5 style="font-weight: bold; text-align: left;">Emails de Lances</h5>
-      <div class="input-container">
-        <i class="fa fa-money icon"></i>
-        <input v-model="config.bidEmails" class="input-field" type="text" placeholder="Emails de Lances" />
-        <button @click="updateConfigField('bidEmails')" class="btn">Atualizar</button>
-      </div>
-  
-      <!-- Campo para "Contact Emails" -->
-      <h5 style="font-weight: bold; text-align: left;">Emails de Contato</h5>
-      <div class="input-container">
-        <i class="fa fa-envelope icon"></i>
-        <input v-model="config.contactEmails" class="input-field" type="text" placeholder="Emails de Contato" />
-        <button @click="updateConfigField('contactEmails')" class="btn">Atualizar</button>
-      </div>
+      
+<!-- Campo para "Simulation Emails" -->
+<h3 style="font-weight: bold; text-align: center;">Emails de Simulação</h3>
+<div class="input-container">
+  <i class="fa fa-calculator icon"></i>
+  <textarea v-model="config.simulationEmails" class="input-field" placeholder="Emails de Simulação"></textarea>
+  <button @click="updateConfigField('simulationEmails')" class="btn">Atualizar</button>
+</div>
+
+<!-- Campo para "Bid Emails" -->
+<h3 style="font-weight: bold; text-align: center;">Emails de Lances</h3>
+<div class="input-container">
+  <i class="fa fa-money icon"></i>
+  <textarea v-model="config.bidEmails" class="input-field" type="text" placeholder="Emails de Lances"></textarea>
+  <button @click="updateConfigField('bidEmails')" class="btn">Atualizar</button>
+</div>
+
+<!-- Campo para "Contact Emails" -->
+<h3 style="font-weight: bold; text-align: center;">Emails de Contato</h3>
+<div class="input-container">
+  <i class="fa fa-envelope icon"></i>
+  <textarea v-model="config.contactEmails" class="input-field" type="text" placeholder="Emails de Contato"></textarea>
+  <button @click="updateConfigField('contactEmails')" class="btn">Atualizar</button>
+</div>
+
     </div>
   </template>
   
@@ -75,7 +57,7 @@
       async fetchConfig() {
         try {
           const token = localStorage.getItem('token');
-          const response = await fetch(`https://restrito.consorcioapice.com.br/apiadmin/config`, {
+          const response = await fetch(`https://localhost:7290/config`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -112,7 +94,7 @@
   
         try {
           const token = localStorage.getItem('token');
-          const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/config_update', {
+          const response = await fetch('https://localhost:7290/config_update', {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -143,12 +125,24 @@
 </script>
   
   <style scoped>
-  .container {
-    padding: 20px;
-    background-color: #27293D;
-    border-radius: 10px;
-    margin-top: 15px;
-  }
+.container {
+  padding: 5px;
+  background-color: white;
+  margin-bottom: 5px;
+  margin-left: 10.7%;
+  border-radius: 15px !important;
+}
+
+h3 {
+  color: #000;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
   
   .input-container {
     display: flex;
@@ -158,26 +152,35 @@
   
   .input-container .icon {
     margin-right: 10px;
+    color: #54565c;
   }
   
-  .input-field {
-    flex: 1;
-    padding: 8px;
-    margin-right: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
+/* Permite o redimensionamento dos inputs */
+.input-field {
+  width: 100%; /* Ou defina um valor fixo, como 500px */
+  height: 100px; /* Aumentando a altura */
+  font-size: 16px; /* Aumentando o tamanho da fonte */
+  padding: 10px; /* Adicionando um padding para melhorar a aparência */
+  box-sizing: border-box; /* Garantir que o padding não afete o tamanho total */
+  border: 1px solid #000;
+  color: #54565c;
+  border-radius: 5px;
+  margin-right: 5px;
+  resize: none;
+}
+
   
   .btn {
     padding: 8px 12px;
-    background-color: #14141f;
+    background-color: #54565c;
     color: white;
+    font-weight: bold;
     border: none;
     border-radius: 5px;
     cursor: pointer;
   }
   
   .btn:hover {
-    background-color: #46466c;
+    background-color: #323436;
   }
   </style>

@@ -1,14 +1,23 @@
 <template>
-  <div class="navbar">
-    <div class="navbar-title" style="cursor: default;">{{ title }}</div>
-    <div class="profile" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false">
-      <button class="dropdown-button">
-        <i class="fa fa-fw fa-user"></i> <!-- Ícone de perfil -->
-        ▼
-      </button>
-      <div class="dropdown-content" v-if="showDropdown">
-        <a href="#" @click.prevent="logout">Logout</a>
-      </div>
+  <div class="w-full flex justify-between px-6 py-2 nav border-b-[1px] border-gray-200 bg-white">
+    <div class="text-black text-3xl font-semibold pl-[120px]">
+      {{ title }}
+    </div>
+    <div class="flex items-center">
+      <svg width="27px" height="27px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+        <g id="SVGRepo_iconCarrier">
+          <path
+            d="M8.90002 7.55999C9.21002 3.95999 11.06 2.48999 15.11 2.48999H15.24C19.71 2.48999 21.5 4.27999 21.5 8.74999V15.27C21.5 19.74 19.71 21.53 15.24 21.53H15.11C11.09 21.53 9.24002 20.08 8.91002 16.54"
+            stroke="#121212" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M15 12H3.62" stroke="#121212" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          </path>
+          <path d="M5.85 8.6499L2.5 11.9999L5.85 15.3499" stroke="#121212" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </g>
+      </svg>
+      <a href="#" @click.prevent="logout" class="no-underline text-black ml-2">Logout</a>
     </div>
   </div>
 </template>
@@ -40,66 +49,19 @@ export default {
   },
   methods: {
     logout() {
-  localStorage.removeItem('token'); // Se você estiver usando token
-  localStorage.removeItem('isAuthenticated'); // Remove o estado de autenticação
-  this.$router.push({ name: 'Login' });
-  
-    this.notify({
-      title: 'Logout realizado',
-      text: 'Você foi redirecionado para a página de login.',
-      type: 'error',
-      duration: 5000
-    });
+      localStorage.removeItem('token'); // Se você estiver usando token
+      localStorage.removeItem('isAuthenticated'); // Remove o estado de autenticação
+      this.$router.push({ name: 'Login' });
+
+      this.notify({
+        title: 'Logout realizado',
+        text: 'Você foi redirecionado para a página de login.',
+        type: 'error',
+        duration: 5000
+      });
+    }
   }
-}
 };
 </script>
-  
-<style scoped>
-  .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #1E1E2F;
-    color: white;
-    padding: 10px 20px;
-    z-index: 1000; /* Adicionando z-index alto */
-    position: relative; /* Para garantir que z-index funcione */
-    border-top: 2px solid #3e9ed8; /* Borda superior com 3px de espessura e cor branca */
-}
 
-.profile {
-  position: relative;
-  margin-right: 40px;
-}
-
-.dropdown-button {
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-size: 1em;
-  display: flex;
-  align-items: center;
-}
-
-.dropdown-content {
-  position: absolute;
-  background-color: #46466c;
-  min-width: 100px;
-  box-shadow: 0px 8px 16px 0px rgba(75, 75, 75, 0.2);
-  z-index: 1;
-}
-
-.dropdown-content a {
-  color: #fff;
-  padding: 10px 12px;
-  text-decoration: none;
-  display: block;
-}
-
-.dropdown-content a:hover {
-  color: #ddd;
-  background-color: #1E1E2F;
-}
-</style>
+<style scoped></style>
