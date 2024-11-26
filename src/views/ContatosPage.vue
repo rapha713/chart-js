@@ -20,7 +20,7 @@
           <th><input class="text-center" type="text" v-model="filters.name" placeholder="Nome" /></th>
           <th><input class="text-center" type="text" v-model="filters.email" placeholder="Email" /></th>
           <th><input class="text-center" type="text" v-model="filters.phone" placeholder="Telefone" /></th>
-          <th><input class="text-center" type="text" v-model="filters.phone" placeholder="Tipo/Documento" /></th>
+          <th><input class="text-center" type="text" v-model="filters.type" placeholder="Tipo/Documento" /></th>
           <th></th>
         </tr>
       </thead>
@@ -78,7 +78,8 @@ export default {
         id: "",
         name: "",
         email: "",
-        phone: ""
+        phone: "",
+        type: ""
       },
       currentPage: 1,
       itemsPerPage: 10,
@@ -92,13 +93,20 @@ export default {
     filteredContacts() {
       return this.contacts.filter(contact => {
         return (
-          (this.filters.id ? contact.id.toString().includes(this.filters.id) : true) &&
-          (this.filters.name ? contact.name.toLowerCase().includes(this.filters.name.toLowerCase()) : true) &&
-          (this.filters.email ? contact.email.toLowerCase().includes(this.filters.email.toLowerCase()) : true) &&
-          (this.filters.phone ? contact.phone.includes(this.filters.phone) : true)
+          (this.filters.id === "" || contact.id?.toString().includes(this.filters.id)) &&
+          (this.filters.name === "" || contact.name?.toLowerCase().includes(this.filters.name.toLowerCase())) &&
+          (this.filters.email === "" || contact.email?.toLowerCase().includes(this.filters.email.toLowerCase())) &&
+          (this.filters.phone === "" || contact.phone?.toString().includes(this.filters.phone)) &&
+          (this.filters.type === "" || contact.tipo?.toLowerCase().includes(this.filters.type.toLowerCase()))
         );
       });
-    }
+    },
+    // Aplica a paginação após a filtragem
+    paginatedContacts() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.filteredContacts.slice(start, end);
+    },
   },
   methods: {
     async fetchData() {

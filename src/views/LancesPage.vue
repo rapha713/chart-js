@@ -18,8 +18,8 @@
           <th>Detalhes</th>
         </tr>
         <tr>
-          <th><input class="text-center" type="text" v-model="filters.id" placeholder="Grupo" /></th>
-          <th><input class="text-center" type="text" v-model="filters.id" placeholder="Cota" /></th>
+          <th><input class="text-center" type="text" v-model="filters.group" placeholder="Grupo" /></th>
+          <th><input class="text-center" type="text" v-model="filters.quota" placeholder="Cota" /></th>
           <th><input class="text-center" type="text" v-model="filters.name" placeholder="Nome" /></th>
           <th><input class="text-center" type="text" v-model="filters.email" placeholder="Email" /></th>
           <th><input class="text-center" type="text" v-model="filters.formattedDocument" placeholder="Documento" /></th>
@@ -250,7 +250,7 @@ tr:nth-child(odd) {
 th:nth-child(1),
 td:nth-child(1) {
   text-align: center;
-  width: 5%;
+  width: 7.5%;
 }
 
 th:nth-child(2),
