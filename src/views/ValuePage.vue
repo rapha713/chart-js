@@ -3,8 +3,9 @@
       <div class="w-full flex px-8 justify-between pb-2 items-center">
         <div class="flex flex-col items-start justify-start py-2">
           <h3 class="mb-0 text-gray-800 font-bold">Valores do slider</h3>
-          <p class="m-0 text-gray-600">Edite os valores</p>
+          <p class="m-0 text-gray-600">Adicione ou Edite os valores</p>
         </div>
+        <button @click="openModal" class="btn btn-primary h-min">Adicionar Valores</button>
       </div>
       <table>
         <thead class="border-b-[1px] border-gray-200">
@@ -35,8 +36,12 @@
               {{ value.maxValue }}
             </td>
             <td>
-              <button @click="editValue(value)"
+              <div class="flex justify-center">
+                <button @click="editValue(value)"
                 class="rounded-md shadow-sm bg-white border-2 border-orange-400 text-orange-400 font-semibold px-[10px] py-[5px]">Editar</button>
+                <button @click="confirmDelete(value.id)"
+                class="ml-2 rounded-md shadow-sm bg-white border-2 border-red-400 text-red-400 font-semibold px-[10px] py-[5px]">Deletar</button>
+            </div>
             </td>
           </tr>
         </tbody>
@@ -79,8 +84,23 @@
           </form>
         </template>
       </UserModal>
+
+      <!-- Off-Canvas para confirmação de exclusão -->
+      <div :class="['off-canvas', { 'open': isOffCanvasOpen }]">
+        <span class="close-button" @click="closeOffCanvas">&times;</span>
+        <div>
+          <h5>Confirmar Exclusão</h5>
+          <p>Você tem certeza que deseja deletar este valor?</p>
+          <input type="password" v-model="adminPassword" placeholder="Senha do Administrador" class="form-control"
+            required style="margin-bottom: 15px;" />
+          <button class="btn btn-danger" @click="deleteUser" style="margin-right: 5px;">Deletar</button>
+          <button class="btn btn-secondary" @click="closeOffCanvas">Cancelar</button>
+        </div>
+      </div>
+      <div v-if="isOffCanvasOpen" class="overlay" @click="closeOffCanvas"></div>
+
     </div>
-  </template>  
+</template>
   
 <script>
   import UserModal from '../components/UserModal.vue';
@@ -96,6 +116,9 @@
         values: [],
         showModal: false,
         isEdit: false,
+        isOffCanvasOpen: false,
+        adminPassword: '',
+        userIdToDelete: null,
         form: {
           id: 0,
           nome: '',
@@ -218,7 +241,7 @@
       async addValue() {
         try {
           const token = localStorage.getItem('token');
-          const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/values', {
+          const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/values/add', {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -253,9 +276,41 @@
           });
         }
       },
+      confirmDelete(id) {
+      this.userIdToDelete = id;
+      this.isOffCanvasOpen = true;
+    },
+    closeOffCanvas() {
+      this.isOffCanvasOpen = false;
+      this.adminPassword = '';
+    },
+    async deleteUser() {
+      if (this.userIdToDelete) {
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch('https://restrito.consorcioapice.com.br/apiadmin/values/deleteWithPassword', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: this.userIdToDelete, password: this.adminPassword })
+          });
+          if (response.ok) {
+            await this.fetchValues();
+            notify({ type: 'success', title: 'Sucesso', text: 'Valor excluído com sucesso!' });
+          } else {
+            throw new Error(response.statusText);
+          }
+        } catch (error) {
+          notify({ type: 'error', title: 'Erro', text: `Erro ao deletar o valor: ${error.message}` });
+        }
+      }
+      this.closeOffCanvas();
     }
-  };
-</script>  
+  }
+};
+</script>
   
   <style scoped>
   .container {

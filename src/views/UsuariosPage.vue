@@ -145,9 +145,11 @@ export default {
       }
     };
   },
+
   async mounted() {
     await this.fetchUsers();
   },
+  
   methods: {
     async fetchUsers() {
       try {
