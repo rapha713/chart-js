@@ -1,43 +1,35 @@
 <template>
   <div class="w-screen h-screen bg-slate-100 flex justify-center items-center">
-    <div
-      class="relative w-[500px] h-[600px] bg-white rounded-md border-[2px] border-slate-300 flex flex-col items-center px-16 py-8">
+    <div class="relative w-[500px] h-[600px] bg-white rounded-md border-[2px] border-slate-300 flex flex-col items-center px-16 py-8">
       <h1 class="text-black font-bold">Olá</h1>
-      <h1 class="font-regular text-lg text-sky-500">Bem vindo de volta!</h1>
+      <h1 class="font-regular text-lg text-sky-500">Bem-vindo de volta!</h1>
 
       <form @submit.prevent="login" class="p-0 w-full">
-
         <div class="flex flex-col justify-between w-full h-[150px] mt-24">
           <div class="relative">
-            <span
-              class="transition-all duration-300 px-2 bg-white absolute start-[15px] top-[-13px] text-slate-600 font-regular"
-              :class="{ 'desce': !temEmail }">E-mail</span>
-            <input required type="email" v-model="email.value" @input="verificaEmail"
-              class="rounded-sm px-[12px] py-[12px] text-xl border-[2px] border-slate-300 w-full">
+            <span class="transition-all duration-300 px-2 bg-white absolute start-[15px] top-[-13px] text-slate-600 font-regular"
+                  :class="{ 'desce': !temEmail }">E-mail ou Usuário</span>
+            <!-- Alterado tipo de input para text -->
+            <input required type="text" v-model="email.value" @input="verificaEmail"
+                   class="rounded-sm px-[12px] py-[12px] text-xl border-[2px] border-slate-300 w-full">
           </div>
           <div class="relative">
-            <span
-              class="transition-all duration-300 px-2 bg-white absolute start-[15px] top-[-13px] text-slate-600 font-regular"
-              :class="{ 'desce': !temSenha }">Senha</span>
+            <span class="transition-all duration-300 px-2 bg-white absolute start-[15px] top-[-13px] text-slate-600 font-regular"
+                  :class="{ 'desce': !temSenha }">Senha</span>
             <input required type="password" v-model="password.value" @input="verificaSenha"
-              class="rounded-sm px-[12px] py-[12px] text-xl border-[2px] border-slate-300 w-full">
+                   class="rounded-sm px-[12px] py-[12px] text-xl border-[2px] border-slate-300 w-full">
           </div>
         </div>
         <p v-if="errorMessage" class="errorMessage mt-4">{{ errorMessage }}</p>
         <div class="w-full mt-8">
           <button type="submit" value="Entrar"
-            class="w-full font-regular text-white bg-sky-500 py-4 text-2xl hover:bg-sky-400">Login</button>
+                  class="w-full font-regular text-white bg-sky-500 py-4 text-2xl hover:bg-sky-400">Login</button>
         </div>
-
-
       </form>
       <div class="w-full absolute start-[20px] bottom-[20px]">
         <img class="w-[100px] h-auto" src="../assets/logo.png" alt="">
       </div>
     </div>
-
-
-
   </div>
 </template>
 
@@ -55,14 +47,14 @@ export default {
   },
   methods: {
     verificaSenha() {
-      this.temSenha = this.password.value.length > 0
+      this.temSenha = this.password.value.length > 0;
     },
     verificaEmail() {
-      this.temEmail = this.email.value.length > 0
+      this.temEmail = this.email.value.length > 0;
     },
     async login() {
       this.errorMessage = "";
-      this.validateEmail();
+      this.validateEmailOrUsername();
       this.validatePassword();
 
       if (this.email.error || this.password.error) {
@@ -76,7 +68,7 @@ export default {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ email: this.email.value, senha: this.password.value }),
+          body: JSON.stringify({ emailOrUsername: this.email.value, senha: this.password.value }),
         });
 
         if (response.ok) {
@@ -93,8 +85,15 @@ export default {
         this.errorMessage = 'Erro ao conectar ao servidor.';
       }
     },
-    validateEmail() {
-      this.email.error = !this.email.value;
+    validateEmailOrUsername() {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (emailRegex.test(this.email.value)) {
+        this.email.error = false;
+      } else if (this.email.value.length < 3) {
+        this.email.error = true;
+      } else {
+        this.email.error = false;
+      }
     },
     validatePassword() {
       this.password.error = !this.password.value;
